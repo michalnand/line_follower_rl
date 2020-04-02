@@ -1,0 +1,68 @@
+<robot name="world">
+ 
+	<link name="plane">
+
+   		<inertial>
+		    <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.0" />
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+        </inertial>
+
+    	<visual>
+      		<geometry>
+        		<box size="10.0 10.0 0.001" />
+      		</geometry>
+
+			<material name="plane_color">
+        		<color rgba="0 0 0 1" />
+      		</material>
+       	
+			<origin rpy="0 0 0" xyz="0 0 0" />
+		</visual>
+
+		<contact>
+		 	<lateral_friction value="1" />
+			<stiffness value="300000" />
+          	<damping value="1000" />
+  		</contact>
+
+  		<collision>
+			<geometry>
+        		<box size="10.0 10.0 0.01" />
+      		</geometry>
+          <origin rpy="0 0 0" xyz="0 0 0" />
+        </collision>
+  
+	</link>
+
+
+	<link name="line">
+
+   		<inertial>
+		    <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.0" />
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+        </inertial>
+
+    	<visual>
+      		<geometry>
+				<mesh filename="./models_tracks/18.obj" scale="1 1 1" />
+      		</geometry>
+       		
+			<material name="line_color">
+        		<color rgba="1 1 1 1" />
+      		</material>
+	    
+			<origin rpy="0 0 0" xyz="0 0 0.001" />
+		</visual>
+    
+	</link>
+
+
+  	<joint name="plane_line" type="fixed">
+		<parent link="plane" />
+		<child link="line" />
+        <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+ 	</joint>
+
+</robot>
