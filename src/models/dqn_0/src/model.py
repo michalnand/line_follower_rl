@@ -12,21 +12,20 @@ class Model(torch.nn.Module):
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        self.input_shape    = input_shape
-        self.outputs_count  = outputs_count
 
-        inputs_count = self.input_shape[0]*self.input_shape[1]
-        
         self.layers = [ 
-                        Flatten(), 
+                        nn.Conv1d(input_shape[0], 32, kernel_size = 3, stride = 2, padding = 1),
+                        nn.ReLU(),
 
-                        nn.Linear(inputs_count, 256),
+                        nn.Conv1d(32, 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),  
 
-                        nn.Linear(256, 64),
-                        nn.ReLU(),                    
+                        Flatten(), 
 
-                        nn.Linear(64, outputs_count)
+                        nn.Linear(4*32, 128),
+                        nn.ReLU(),  
+
+                        nn.Linear(128, outputs_count)
                     ]
 
         for i in range(len(self.layers)):

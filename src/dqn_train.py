@@ -1,6 +1,7 @@
 import agents.dqn
 from gym_linefollower.linefollower_env import LineFollowerEnvRawBasic as LineFollowerEnv
 
+
 class LineFollowerEnvWrapper(LineFollowerEnv):
     def __init__(self):
         LineFollowerEnv.__init__(self)
@@ -10,13 +11,13 @@ class LineFollowerEnvWrapper(LineFollowerEnv):
         return observation, reward, [done, done], info
 
 
-import models.dqn_fc.src.model
-import models.dqn_fc.src.config
+import models.dqn_0.src.model
+import models.dqn_0.src.config
 
-model  = models.dqn_fc.src.model
-config = models.dqn_fc.src.config.Config()
+model  = models.dqn_0.src.model
+config = models.dqn_0.src.config.Config()
 
-save_path = "./models/dqn_fc/"
+save_path = "./models/dqn_0/"
 
 env = LineFollowerEnvWrapper() 
 env.reset()

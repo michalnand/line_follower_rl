@@ -1,0 +1,132 @@
+iterations                = 2358
+game_id                   = 1
+score                     = -692.3461703947329
+game_iterations           = 2358
+game_iterations_smooth    = 2358.0
+game_score                = -692.3461703947329
+game_score_smooth         = -692.3461703947329
+fps_smooth                = 747.9470974552921
+
+
+
+iterations                = 2716
+game_id                   = 2
+score                     = -787.8613464460748
+game_iterations           = 358
+game_iterations_smooth    = 2338.0
+game_score                = -95.51517605134255
+game_score_smooth         = -686.3778604512991
+fps_smooth                = 813.0156544655378
+
+
+
+iterations                = 2976
+game_id                   = 3
+score                     = -838.4421146572006
+game_iterations           = 260
+game_iterations_smooth    = 2317.22
+game_score                = -50.58076821112603
+game_score_smooth         = -680.0198895288974
+fps_smooth                = 859.182146498301
+
+
+
+iterations                = 3573
+game_id                   = 4
+score                     = -895.8337461068788
+game_iterations           = 597
+game_iterations_smooth    = 2300.0177999999996
+game_score                = -57.39163144967834
+game_score_smooth         = -673.7936069481051
+fps_smooth                = 717.6936288698623
+
+
+
+iterations                = 4020
+game_id                   = 5
+score                     = -941.8047029904147
+game_iterations           = 447
+game_iterations_smooth    = 2281.487621999999
+game_score                = -45.97095688353614
+game_score_smooth         = -667.5153804474594
+fps_smooth                = 723.1655165324665
+
+
+
+iterations                = 4408
+game_id                   = 6
+score                     = -1021.0051113700736
+game_iterations           = 388
+game_iterations_smooth    = 2262.5527457799994
+game_score                = -79.20040837965813
+game_score_smooth         = -661.6322307267814
+fps_smooth                = 720.4703379652769
+
+
+
+iterations                = 5370
+game_id                   = 7
+score                     = -1196.1682004856605
+game_iterations           = 962
+game_iterations_smooth    = 2249.547218322199
+game_score                = -175.16308911558363
+game_score_smooth         = -656.7675393106693
+fps_smooth                = 724.4011134130129
+
+
+
+iterations                = 6059
+game_id                   = 8
+score                     = -1316.055488052899
+game_iterations           = 689
+game_iterations_smooth    = 2233.941746138977
+game_score                = -119.88728756723947
+game_score_smooth         = -651.398736793235
+fps_smooth                = 748.2683573140765
+
+
+
+iterations                = 6870
+game_id                   = 9
+score                     = -1444.4009983654073
+game_iterations           = 811
+game_iterations_smooth    = 2219.7123286775873
+game_score                = -128.3455103125043
+game_score_smooth         = -646.1682045284276
+fps_smooth                = 930.9633535214367
+
+
+
+iterations                = 7456
+game_id                   = 10
+score                     = -1509.665533502315
+game_iterations           = 586
+game_iterations_smooth    = 2203.3752053908115
+game_score                = -65.26453513690831
+game_score_smooth         = -640.3591678345124
+fps_smooth                = 731.3871397141716
+
+
+
+iterations                = 9226
+game_id                   = 11
+score                     = -1872.693914459188
+game_iterations           = 1770
+game_iterations_smooth    = 2199.041453336903
+game_score                = -363.02838095686843
+game_score_smooth         = -637.585859965736
+fps_smooth                = 935.5178537496115
+
+
+
+iterations                = 10492
+game_id                   = 12
+score                     = -2309.1800279334766
+game_iterations           = 1266
+game_iterations_smooth    = 2189.711038803534
+game_score                = -436.4861134742888
+game_score_smooth         = -635.5748625008215
+fps_smooth                = 748.9335119716189
+
+
+
