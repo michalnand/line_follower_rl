@@ -47,8 +47,10 @@ class LineFollowerEnv(gym.Env):
 
         self.actions = []
         
-        self.actions.append([0.025, 0.0])
-        self.actions.append([0.0, 0.025])
+        self.actions.append([0.0, 0.0])
+
+        self.actions.append([0.01, 0.0])
+        self.actions.append([0.0, 0.01])
 
         self.actions.append([0.05, 0.0])
         self.actions.append([0.0, 0.05])
@@ -65,11 +67,10 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.3, 0.1])
         self.actions.append([0.1, 0.3])
 
-        self.actions.append([0.5, 0.4])
-        self.actions.append([0.4, 0.5])
+        self.actions.append([0.3, 0.2])
+        self.actions.append([0.2, 0.3])
 
-        self.actions.append([0.0, 0.0])
-        self.actions.append([0.7, 0.7])
+        self.actions.append([0.5, 0.5])
 
         self.time_step = 0
 
@@ -117,8 +118,11 @@ class LineFollowerEnv(gym.Env):
 
         return self.observation
 
-
     def step(self, action):
+        left_power_target, right_power_target = self.actions[action]
+        return self.step_continuous(left_power_target, right_power_target)
+
+    def step_continuous(self, left_power_target, right_power_target):
         self.time_step+= 1
 
         robot_x, robot_y, robot_z, pitch, roll, yaw = self.bot.get_position()
@@ -126,13 +130,11 @@ class LineFollowerEnv(gym.Env):
         l_pos, r_pos = self.bot.get_wheel_position()
         l_vel, r_vel = self.bot.get_wheel_velocity()
         l_tor, r_tor = self.bot.get_wheel_torque()
-
-        left_power_target, right_power_target = self.actions[action]
     
-        k = 0.5
+        k = 1.0
 
-        self.left_power   = (1.0 - k)*self.left_power + k*left_power_target
-        self.right_power  = (1.0 - k)*self.right_power + k*right_power_target
+        self.left_power   = (1.0 - k)*self.left_power + k*numpy.clip(left_power_target, -1.0, 1.0)
+        self.right_power  = (1.0 - k)*self.right_power + k*numpy.clip(right_power_target, -1.0, 1.0)
     
         self.bot.set_throttle(self.left_power, self.right_power)
    
@@ -226,7 +228,7 @@ class LineFollowerEnv(gym.Env):
     def _update_observation(self):
         if self.state_type == "raw":
 
-            line_position = self._get_line_position(0.04)
+            line_position = self._get_line_position(0.05)
 
             left_velocity, right_velocity = self.bot.get_wheel_velocity()
             self.obs.process(line_position, left_velocity, right_velocity)
@@ -237,9 +239,10 @@ class LineFollowerEnv(gym.Env):
         return self.obs.get()
 
     def _get_line_position(self, sensor_distance = 0.0):
+
         x, y, _, _, _, yaw = self.bot.get_position()
         x_ = x + sensor_distance*numpy.cos(yaw)
-        y_ = y + sensor_distance*numpy.sin(yaw)
+        y_ = y + sensor_distance*numpy.sin(yaw) 
 
         _, distance  = self.line.get_closest(x_, y_)
 
