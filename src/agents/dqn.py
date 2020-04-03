@@ -61,10 +61,9 @@ class Agent():
 
         round_done = done[0]
         game_done  = done[1]
-        
+
         if self.enabled_training:
             self.experience_replay.add(self.observation, q_values, self.action, self.reward, round_done)
-
        
         if self.enabled_training and (self.iterations > self.experience_replay.size):
             if self.iterations%self.update_frequency == 0:

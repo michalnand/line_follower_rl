@@ -58,13 +58,14 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.4, 0.5])
         self.actions.append([0.1, 0.3])
 
-        self.time_step = 0
 
         self.pb_client = PybulletClient()
         self.reset()
 
-
+ 
     def reset(self):
+        self.steps = 0
+
         self.pb_client.resetSimulation()
 
         self.pb_client.setGravity(0, 0, -9.81, )
@@ -89,8 +90,6 @@ class LineFollowerEnv(gym.Env):
         self.left_power  = 0.0
         self.right_power = 0.0
 
-        self.render_steps = 0
-
         self.observation = None
         self.reward      = 0.0
         self.done        = False
@@ -104,7 +103,6 @@ class LineFollowerEnv(gym.Env):
 
 
     def step(self, action):
-        self.time_step+= 1
 
         robot_x, robot_y, robot_z, pitch, roll, yaw = self.bot.get_position()
 
@@ -149,13 +147,15 @@ class LineFollowerEnv(gym.Env):
             self.reward = -1.0
 
         self.observation = self._update_observation()
-        
+
+        self.steps+= 1
+
         return self.observation, self.reward, self.done, self.info
         
 
 
     def render(self, mode = None):
-        if self.render_steps%4 == 0:
+        if self.steps%4 == 0:
             robot_x, robot_y, robot_z, pitch, roll, yaw = self.bot.get_position()
 
             width  = 256
@@ -196,7 +196,6 @@ class LineFollowerEnv(gym.Env):
             image = numpy.array(image, dtype=numpy.uint8)
             self._draw_fig(image)
         
-        self.render_steps+= 1
 
     def _draw_fig(self, image):
         rgb = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
@@ -209,7 +208,10 @@ class LineFollowerEnv(gym.Env):
         return self.bot.get_image(yaw*180.0/self.pi - 90, -15.0, 0.0, 0.015, robot_x, robot_y, robot_z + 0.1, width = width, height = height, fov=60)
 
     def _update_observation(self):
-        return self.obs.process(self._get_camera_view())
+        if self.steps%4 == 0:
+            self.obs.process(self._get_camera_view())
+            
+        return self.obs.get()
     
 
 class LineFollowerEnvSimpleFS1(LineFollowerEnv):
