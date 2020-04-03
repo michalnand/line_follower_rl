@@ -141,8 +141,8 @@ class LineFollowerEnv(gym.Env):
         l_vel, r_vel = self.bot.get_wheel_velocity()
         l_tor, r_tor = self.bot.get_wheel_torque()
     
-        k = 1.0
-
+        k = 0.5
+        
         self.left_power   = (1.0 - k)*self.left_power + k*numpy.clip(left_power_target, -1.0, 1.0)
         self.right_power  = (1.0 - k)*self.right_power + k*numpy.clip(right_power_target, -1.0, 1.0)
     
