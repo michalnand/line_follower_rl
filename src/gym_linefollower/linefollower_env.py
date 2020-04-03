@@ -142,7 +142,7 @@ class LineFollowerEnv(gym.Env):
         l_tor, r_tor = self.bot.get_wheel_torque()
     
         k = 0.5
-        
+
         self.left_power   = (1.0 - k)*self.left_power + k*numpy.clip(left_power_target, -1.0, 1.0)
         self.right_power  = (1.0 - k)*self.right_power + k*numpy.clip(right_power_target, -1.0, 1.0)
     
@@ -158,11 +158,11 @@ class LineFollowerEnv(gym.Env):
 
 
         #negative reward for not line following
-        self.reward+= -1.0*numpy.clip(closest_distance*5.0, 0.0, 1.0)
-
+        self.reward+= -1.0*numpy.clip(closest_distance*100.0/4.0, 0.0, 1.0)
+ 
         #positive reward for moving to next field
         if self.visited_points[closest_idx] == False:
-            self.reward+= 1.0 
+            self.reward+= 0.1
             self.visited_points[closest_idx] = True
 
         visited_count = numpy.sum(self.visited_points)
