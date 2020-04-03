@@ -42,16 +42,7 @@ class LineFollowerEnv(gym.Env):
             height = 96     
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
-
-        self.action_space = spaces.Discrete(4)
-        self.actions = []
-        
-        self.actions.append([0.0, 0.0])
-        self.actions.append([0.0, 0.2])
-        self.actions.append([0.2, 0.0])
-        self.actions.append([0.2, 0.2])
-
-        '''
+ 
         self.action_space = spaces.Discrete(16)
 
         self.actions = []
@@ -80,7 +71,6 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.2, 0.3])
 
         self.actions.append([0.5, 0.5])
-        '''
 
         self.time_step = 0
 
@@ -158,11 +148,11 @@ class LineFollowerEnv(gym.Env):
 
 
         #negative reward for not line following
-        self.reward+= -1.0*numpy.clip(closest_distance*100.0/4.0, 0.0, 1.0)
- 
+        self.reward+= -1.0*numpy.clip(closest_distance*4.0, 0.0, 1.0)
+
         #positive reward for moving to next field
         if self.visited_points[closest_idx] == False:
-            self.reward+= 0.1
+            self.reward+= 1.0 
             self.visited_points[closest_idx] = True
 
         visited_count = numpy.sum(self.visited_points)
