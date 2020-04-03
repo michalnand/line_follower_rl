@@ -46,24 +46,30 @@ class LineFollowerEnv(gym.Env):
         self.action_space = spaces.Discrete(16)
 
         self.actions = []
+        
+        self.actions.append([0.025, 0.0])
+        self.actions.append([0.0, 0.025])
 
-        self.actions.append([1.0, 0.0])
-        self.actions.append([0.8, 0.0])
-        self.actions.append([0.6, 0.0])
-        self.actions.append([0.5, 0.0])
-        self.actions.append([1.0, 0.9])
-        self.actions.append([0.8, 0.6])
-        self.actions.append([0.5, 0.4])
+        self.actions.append([0.05, 0.0])
+        self.actions.append([0.0, 0.05])
+
+        self.actions.append([0.1, 0.0])
+        self.actions.append([0.0, 0.1])
+
+        self.actions.append([0.2, 0.0])
+        self.actions.append([0.0, 0.2])
+
+        self.actions.append([0.2, 0.1])
+        self.actions.append([0.1, 0.2])
+
         self.actions.append([0.3, 0.1])
-
-        self.actions.append([0.0, 1.0])
-        self.actions.append([0.0, 0.8])
-        self.actions.append([0.0, 0.6])
-        self.actions.append([0.0, 0.5])
-        self.actions.append([0.9, 1.0])
-        self.actions.append([0.6, 0.8])
-        self.actions.append([0.4, 0.5])
         self.actions.append([0.1, 0.3])
+
+        self.actions.append([0.5, 0.4])
+        self.actions.append([0.4, 0.5])
+
+        self.actions.append([0.0, 0.0])
+        self.actions.append([0.7, 0.7])
 
         self.time_step = 0
 
@@ -123,7 +129,7 @@ class LineFollowerEnv(gym.Env):
 
         left_power_target, right_power_target = self.actions[action]
     
-        k = 0.05
+        k = 0.5
 
         self.left_power   = (1.0 - k)*self.left_power + k*left_power_target
         self.right_power  = (1.0 - k)*self.right_power + k*right_power_target
@@ -140,7 +146,7 @@ class LineFollowerEnv(gym.Env):
 
 
         #negative reward for not line following
-        self.reward+= -1.0*numpy.clip(closest_distance*10.0, 0.0, 1.0)
+        self.reward+= -1.0*numpy.clip(closest_distance*5.0, 0.0, 1.0)
 
         #positive reward for moving to next field
         if self.visited_points[closest_idx] == False:
@@ -220,7 +226,7 @@ class LineFollowerEnv(gym.Env):
     def _update_observation(self):
         if self.state_type == "raw":
 
-            line_position = self._get_line_position()
+            line_position = self._get_line_position(0.04)
 
             left_velocity, right_velocity = self.bot.get_wheel_velocity()
             self.obs.process(line_position, left_velocity, right_velocity)
@@ -230,9 +236,12 @@ class LineFollowerEnv(gym.Env):
 
         return self.obs.get()
 
-    def _get_line_position(self, sensor_distance = 30.0):
+    def _get_line_position(self, sensor_distance = 0.0):
         x, y, _, _, _, yaw = self.bot.get_position()
-        _, distance  = self.line.get_closest(x, y)
+        x_ = x + sensor_distance*numpy.cos(yaw)
+        y_ = y + sensor_distance*numpy.sin(yaw)
+
+        _, distance  = self.line.get_closest(x_, y_)
 
         if self.line_polygon.contains(Point(x, y)):
             line_position = 1.0*distance
