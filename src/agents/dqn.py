@@ -61,7 +61,7 @@ class Agent():
 
         round_done = done[0]
         game_done  = done[1]
-
+        
         if self.enabled_training:
             self.experience_replay.add(self.observation, q_values, self.action, self.reward, round_done)
 

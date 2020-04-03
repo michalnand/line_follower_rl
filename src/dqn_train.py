@@ -1,5 +1,5 @@
 import agents.dqn
-from gym_linefollower.linefollower_env import LineFollowerEnvAdvancedFS4 as LineFollowerEnv
+from gym_linefollower.linefollower_env import LineFollowerEnvSimpleFS4 as LineFollowerEnv
 
 class LineFollowerEnvWrapper(LineFollowerEnv):
     def __init__(self):
