@@ -101,7 +101,6 @@ class LineFollowerBot:
                                                              height=height,
                                                              viewMatrix=vm,
                                                              projectionMatrix=pm,
-                                                             shadow = 0,
                                                              renderer=self.pb_client.ER_BULLET_HARDWARE_OPENGL)
 
         rgb = numpy.array(rgb)
