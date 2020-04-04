@@ -4,7 +4,7 @@ class Config():
 
     def __init__(self):
         self.type  = "dqn"
-        self.gamma = 0.99
+        self.gamma = 0.9
 
         self.update_frequency = 4
 
