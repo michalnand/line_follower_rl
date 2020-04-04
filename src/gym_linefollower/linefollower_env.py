@@ -43,13 +43,17 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
  
-        self.action_space = spaces.Discrete(16)
+        self.action_space = spaces.Discrete(4)
 
         self.actions = []
         
         self.actions.append([0.0, 0.0])
         self.actions.append([0.5, 0.5])
 
+        self.actions.append([0.3, 0.0])
+        self.actions.append([0.0, 0.3])
+
+        '''
         self.actions.append([0.05, 0.0])
         self.actions.append([0.0, 0.05])
 
@@ -70,29 +74,7 @@ class LineFollowerEnv(gym.Env):
 
         self.actions.append([0.5, 0.4])
         self.actions.append([0.4, 0.5])
-
-
         '''
-        self.actions.append([0.05, 0.0])
-        self.actions.append([0.0, 0.05])
-
-        self.actions.append([0.1, 0.0])
-        self.actions.append([0.0, 0.1])
-
-        self.actions.append([0.2, 0.0])
-        self.actions.append([0.0, 0.2])
-
-        self.actions.append([0.2, 0.1])
-        self.actions.append([0.1, 0.2])
-
-        self.actions.append([0.3, 0.1])
-        self.actions.append([0.1, 0.3])
-
-        self.actions.append([0.3, 0.2])
-        self.actions.append([0.2, 0.3])
-
-        self.actions.append([0.5, 0.5])
-        ''' 
 
         self.pb_client = PybulletClient()
         self.reset()
