@@ -85,8 +85,8 @@ class LineFollowerEnv(gym.Env):
     def reset(self):
         self.pb_client.resetSimulation()
 
-        self.pb_client.setGravity(0, 0, -9.81, )
-        self.pb_client.setTimeStep(self.dt, )
+        self.pb_client.setGravity(0, 0, -9.81)
+        self.pb_client.setTimeStep(self.dt)
 
         if self.line_mode == "advanced":
             track_idx = numpy.random.randint(32)
@@ -136,7 +136,20 @@ class LineFollowerEnv(gym.Env):
 
 
         closest_idx, closest_distance = self.line.get_closest(robot_x, robot_y)
+        line_position = self._get_line_position()
 
+        self.done = False
+        self.reward = -0.01
+        if self.steps > 4096:
+            self.done = True
+        elif numpy.abs(line_position) > 0.05:
+            self.done = True
+            reward = -1.0
+        elif self.visited_points[closest_idx] == False:
+            self.reward = 1.0 
+            self.visited_points[closest_idx] = True
+ 
+        ''' 
         self.done   = False
         self.reward = 0.0
 
@@ -152,16 +165,21 @@ class LineFollowerEnv(gym.Env):
         #too many time steps
         elif self.steps > 4096:
             self.done = True
+        elif (numpy.abs(self._get_line_position()) >= 0.999):
+            self.done = True
+            self.reward = -1.0
         else:
             #small negative reward for not line following
-            self.reward = -1.0*numpy.clip(closest_distance*100.0, 0.0, 1.0)
-
+            #self.reward = -1.0*numpy.clip(closest_distance, 0.0, 1.0)
+ 
             #positive reward for moving to next field
             if self.visited_points[closest_idx] == False:
                 self.reward+= 1.0 
                 self.visited_points[closest_idx] = True
+        '''
 
         self.observation = self._update_observation()
+
         
         return self.observation, self.reward, self.done, self.info
         
@@ -232,7 +250,7 @@ class LineFollowerEnv(gym.Env):
 
         return self.obs.get()
 
-    def _get_line_position(self, sensor_distance = 0.0):
+    def _get_line_position(self, sensor_distance = 0.04):
 
         x, y, _, _, _, yaw = self.bot.get_position()
         x_ = x + sensor_distance*numpy.cos(yaw)
