@@ -43,21 +43,34 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
  
-        self.action_space = spaces.Discrete(8)
+        self.action_space = spaces.Discrete(16)
 
         self.actions = []
         
         self.actions.append([0.0, 0.0])
-        self.actions.append([0.3, 0.3])
+        self.actions.append([0.5, 0.5])
 
-        self.actions.append([0.01, 0.0])
-        self.actions.append([0.0, 0.01])
+        self.actions.append([0.05, 0.0])
+        self.actions.append([0.0, 0.05])
 
         self.actions.append([0.1, 0.0])
         self.actions.append([0.0, 0.1])
 
         self.actions.append([0.2, 0.0])
         self.actions.append([0.0, 0.2])
+
+        self.actions.append([0.3, 0.0])
+        self.actions.append([0.0, 0.3])
+
+        self.actions.append([0.2, 0.1])
+        self.actions.append([0.1, 0.2])
+
+        self.actions.append([0.3, 0.1])
+        self.actions.append([0.1, 0.3])
+
+        self.actions.append([0.5, 0.4])
+        self.actions.append([0.4, 0.5])
+
 
         '''
         self.actions.append([0.05, 0.0])
@@ -225,7 +238,7 @@ class LineFollowerEnv(gym.Env):
     def _update_observation(self):
         if self.state_type == "raw":
 
-            line_position = self._get_line_position(0.05)
+            line_position = self._get_line_position(0.04)
 
             left_velocity, right_velocity = self.bot.get_wheel_velocity()
             self.obs.process(line_position, left_velocity, right_velocity)
@@ -243,7 +256,7 @@ class LineFollowerEnv(gym.Env):
 
         _, distance  = self.line.get_closest(x_, y_)
 
-        if self.line_polygon.contains(Point(x, y)):
+        if self.line_polygon.contains(Point(x_, y_)):
             line_position = 1.0*distance
         else:
             line_position = -1.0*distance
