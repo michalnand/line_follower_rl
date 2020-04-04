@@ -14,18 +14,18 @@ class Model(torch.nn.Module):
 
 
         self.layers = [ 
-                        nn.Conv1d(input_shape[0], 16, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv1d(input_shape[0], 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
 
-                        nn.Conv1d(16, 32, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv1d(32, 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),  
 
                         Flatten(),  
 
-                        nn.Linear(4*32, 128),
+                        nn.Linear(4*32, 256),
                         nn.ReLU(),  
 
-                        nn.Linear(128, outputs_count)
+                        nn.Linear(256, outputs_count)
                     ]
 
         for i in range(len(self.layers)):
@@ -46,7 +46,6 @@ class Model(torch.nn.Module):
             network_output  = self.model.forward(state_dev)
 
             q_values = network_output[0].to("cpu").detach().numpy()
-            print(q_values)
             return q_values
     
     def save(self, path):
