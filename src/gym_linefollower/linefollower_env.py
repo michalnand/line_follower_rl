@@ -144,7 +144,7 @@ class LineFollowerEnv(gym.Env):
             self.done = True
         elif numpy.abs(line_position) > 0.05:
             self.done = True
-            reward = -1.0
+            self.reward = -1.0
         elif self.visited_points[closest_idx] == False:
             self.reward = 1.0 
             self.visited_points[closest_idx] = True
