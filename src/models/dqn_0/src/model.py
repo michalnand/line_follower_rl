@@ -17,15 +17,15 @@ class Model(torch.nn.Module):
                         nn.Conv1d(input_shape[0], 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
 
-                        nn.Conv1d(32, 32, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv1d(32, 64, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),  
 
-                        Flatten(), 
+                        Flatten(),  
 
-                        nn.Linear(4*32, 128),
+                        nn.Linear(4*64, 256),
                         nn.ReLU(),  
 
-                        nn.Linear(128, outputs_count)
+                        nn.Linear(256, outputs_count)
                     ]
 
         for i in range(len(self.layers)):
