@@ -139,7 +139,7 @@ class LineFollowerEnv(gym.Env):
             self.done = True 
         else:
             #negative reward for not line following
-            #self.reward+= -1.0*numpy.clip(closest_distance*10.0, 0.0, 1.0)
+            self.reward+= -1.0*numpy.clip(closest_distance, 0.0, 1.0)
 
             #positive reward for moving to next field
             if self.visited_points[closest_idx] == False:
