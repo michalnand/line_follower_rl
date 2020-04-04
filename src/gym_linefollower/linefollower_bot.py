@@ -23,15 +23,18 @@ class LineFollowerBot:
         self.set_throttle(0.0, 0.0)
         
 
-    def set_throttle(self, left_power, right_power):
+    def set_throttle(self, left_power, right_power, inertia = 0.8):
+        self.left_velocity   =  inertia*self.left_velocity  + (1.0 - inertia)*left_power
+        self.right_velocity  =  inertia*self.right_velocity + (1.0 - inertia)*right_power
 
-        vl, vr = self.get_wheel_velocity()
+        self.set_velocity(self.left_velocity, self.right_velocity)
+    
+    def set_velocity(self, left_velocity, right_velocity):
+        vl  = numpy.clip(left_velocity, -1.0, 1.0)*self.speed_max
+        vr  = numpy.clip(right_velocity, -1.0, 1.0)*self.speed_max
 
-        self.left_velocity  =  vl + (left_power - vl/self.speed_max)*100.0
-        self.right_velocity =  vr + (right_power - vr/self.speed_max)*100.0
+        self._set_wheel_velocity(vl, vr)
 
-        self._set_wheel_velocity(self.left_velocity, self.right_velocity)
-   
 
     def get_wheel_position(self):
         l_pos, l_vel, l_react, l_torque = self.pb_client.getJointState(self.bot_model, self.left_wheel_joint)

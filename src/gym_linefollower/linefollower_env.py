@@ -105,11 +105,6 @@ class LineFollowerEnv(gym.Env):
         for i in range(100):
             self.pb_client.stepSimulation()
 
-
-
-        self.left_power  = 0.0
-        self.right_power = 0.0
-
         self.steps = 0
 
         self.observation = None
@@ -137,13 +132,8 @@ class LineFollowerEnv(gym.Env):
         l_pos, r_pos = self.bot.get_wheel_position()
         l_vel, r_vel = self.bot.get_wheel_velocity()
         l_tor, r_tor = self.bot.get_wheel_torque()
-    
-        k = 0.5
 
-        self.left_power   = (1.0 - k)*self.left_power + k*numpy.clip(left_power_target, -1.0, 1.0)
-        self.right_power  = (1.0 - k)*self.right_power + k*numpy.clip(right_power_target, -1.0, 1.0)
-    
-        self.bot.set_throttle(self.left_power, self.right_power)
+        self.bot.set_throttle(left_power_target, right_power_target)
    
         self.pb_client.stepSimulation()
 
