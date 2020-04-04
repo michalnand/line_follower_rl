@@ -35,7 +35,7 @@ class LineFollowerEnv(gym.Env):
             self.models_path = "."
       
         if self.state_type == "raw":
-            self.obs = ObservationRaw(frame_stacking)
+            self.obs = ObservationRaw(frame_stacking)  
             self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(3, frame_stacking), dtype=numpy.float)
         else:
             width  = 96
