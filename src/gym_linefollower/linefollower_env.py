@@ -56,6 +56,9 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.1, 0.0])
         self.actions.append([0.0, 0.1])
 
+        self.actions.append([0.2, 0.0])
+        self.actions.append([0.0, 0.2])
+
         '''
         self.actions.append([0.05, 0.0])
         self.actions.append([0.0, 0.05])
@@ -172,8 +175,6 @@ class LineFollowerEnv(gym.Env):
                 self.visited_points[closest_idx] = True
 
         self.observation = self._update_observation()
-
-        print(self.steps, self.reward)
         
         return self.observation, self.reward, self.done, self.info
         
