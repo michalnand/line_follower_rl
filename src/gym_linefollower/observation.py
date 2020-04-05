@@ -8,16 +8,17 @@ class ObservationRaw:
         self.channels       = 3
         self._reset()
 
-    def process(self, line_position, left_speed, right_speed):        
+    def process(self, line_position, left_speed, right_speed):       
+
         if self.sequence_length > 1:
             for i in reversed(range(self.sequence_length-1)):
-                self.observation[0][i+1] = self.observation[0][i]
-                self.observation[1][i+1] = self.observation[1][i]
-                self.observation[2][i+1] = self.observation[2][i]
-            
-        self.observation[0][0] = numpy.clip(line_position*1000.0/40.0,   -1.0, 1.0)
-        self.observation[1][0] = numpy.clip(left_speed/100.0,            -1.0, 1.0)
-        self.observation[2][0] = numpy.clip(right_speed/100.0,           -1.0, 1.0)
+                self.observation[self.sequence_length*0 + i+1] = self.observation[self.sequence_length*0 + i]
+                self.observation[self.sequence_length*1 + i+1] = self.observation[self.sequence_length*1 + i]
+                self.observation[self.sequence_length*2 + i+1] = self.observation[self.sequence_length*2 + i]
+
+        self.observation[self.sequence_length*0] = numpy.clip(line_position*1000.0/40.0,   -1.0, 1.0)
+        self.observation[self.sequence_length*1] = numpy.clip(left_speed/100.0,            -1.0, 1.0)
+        self.observation[self.sequence_length*2] = numpy.clip(right_speed/100.0,           -1.0, 1.0)
 
         return self.observation
 
@@ -25,7 +26,7 @@ class ObservationRaw:
         return self.observation
 
     def _reset(self):
-        self.observation = numpy.zeros((self.channels, self.sequence_length))
+        self.observation = numpy.zeros((self.channels*self.sequence_length, ))
 
 
 class ObservationFrames:

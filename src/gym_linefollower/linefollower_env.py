@@ -36,7 +36,7 @@ class LineFollowerEnv(gym.Env):
       
         if self.state_type == "raw":
             self.obs = ObservationRaw(frame_stacking)  
-            self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(3, frame_stacking), dtype=numpy.float)
+            self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(3, frame_stacking, ), dtype=numpy.float)
         else:
             width  = 96
             height = 96     
@@ -138,55 +138,32 @@ class LineFollowerEnv(gym.Env):
         closest_idx, closest_distance = self.line.get_closest(robot_x, robot_y)
         line_position = self._get_line_position()
 
-        self.done = False
-        self.reward = -0.01
-        if self.steps > 4096:
-            self.done = True
-        elif numpy.abs(line_position) > 0.1:
-            self.reward = -1.0
-            self.done   = True
-        elif numpy.abs(line_position) > 0.05:
-            self.reward = -0.1
-        elif self.visited_points[closest_idx] == False:
-            self.reward = 1.0 
-            self.visited_points[closest_idx] = True
- 
-        ''' 
         self.done   = False
         self.reward = 0.0
 
-
-        #bot is too far away from line
-        if closest_distance > 0.15:
-            self.done   = True
-            self.reward = -1.0
+        #too many time steps
+        if self.steps > 4096:
+            self.done = True
         #all line fields visited
-        elif  numpy.sum(self.visited_points) >= 0.9*self.line.get_length():
+        elif numpy.sum(self.visited_points) >= 0.98*self.line.get_length():
             self.done   = True
             self.reward = 1.0
-        #too many time steps
-        elif self.steps > 4096:
-            self.done = True
-        elif (numpy.abs(self._get_line_position()) >= 0.999):
-            self.done = True
+        #bot is too far away from line
+        elif closest_distance > 0.15:
             self.reward = -1.0
+            self.done   = True
         else:
             #small negative reward for not line following
-            #self.reward = -1.0*numpy.clip(closest_distance, 0.0, 1.0)
- 
+            self.reward = -1.0*numpy.clip(closest_distance*10.0, 0.0, 1.0)
+            
             #positive reward for moving to next field
             if self.visited_points[closest_idx] == False:
                 self.reward+= 1.0 
                 self.visited_points[closest_idx] = True
-        '''
 
         self.observation = self._update_observation()
-
-        
         return self.observation, self.reward, self.done, self.info
         
-
-
     def render(self, mode = None):
         if self.steps%4 == 0:
             robot_x, robot_y, robot_z, pitch, roll, yaw = self.bot.get_position()
