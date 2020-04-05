@@ -19,10 +19,10 @@ class Model(torch.nn.Module):
                         nn.Linear(input_shape[0], 256),
                         nn.ReLU(),  
 
-                        nn.Linear(256, 64),
+                        nn.Linear(256, 256),
                         nn.ReLU(),  
 
-                        nn.Linear(64, outputs_count)
+                        nn.Linear(256, outputs_count)
                     ]
 
         for i in range(len(self.layers)):
