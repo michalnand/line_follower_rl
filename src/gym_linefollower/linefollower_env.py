@@ -50,10 +50,11 @@ class LineFollowerEnv(gym.Env):
 
         self.actions.append([0.3, 0.0])
         self.actions.append([0.0, 0.3]) 
+
         '''
 
 
-        self.action_space = spaces.Discrete(16)
+        self.action_space = spaces.Discrete(8)
 
         self.actions = [] 
         
@@ -64,24 +65,12 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.5, 0.0])
         self.actions.append([0.0, 0.5]) 
 
-        self.actions.append([0.6, 0.0])
-        self.actions.append([0.0, 0.6]) 
+        self.actions.append([0.6, 0.5])
+        self.actions.append([0.5, 0.6]) 
 
         self.actions.append([0.0, 0.0])
         self.actions.append([0.7, 0.7]) 
 
-        self.actions.append([0.3, 0.2])
-        self.actions.append([0.2, 0.3]) 
-
-        self.actions.append([0.3, 0.1])
-        self.actions.append([0.1, 0.3]) 
-
-        self.actions.append([0.4, 0.1])
-        self.actions.append([0.1, 0.4]) 
-        
-        self.actions.append([0.6, 0.5])
-        self.actions.append([0.5, 0.6]) 
-        
 
         self.pb_client = PybulletClient()
         self.reset()
@@ -93,12 +82,14 @@ class LineFollowerEnv(gym.Env):
         self.pb_client.setGravity(0, 0, -9.81)
         self.pb_client.setTimeStep(self.dt)
 
+
         if self.line_mode == "advanced":
             track_idx = numpy.random.randint(32)
             self.line = TrackLoad(self.pb_client, self.models_path + "/models_tracks/" + str(track_idx))
         else:
             self.line = TrackLoad(self.pb_client, self.models_path + "/models/track_plane_template")
         
+
         starting_position = self.line.get_start_random()
 
         self.bot = LineFollowerBot(self.pb_client, self.models_path + "/models/robot_simple.urdf", starting_position = starting_position)
