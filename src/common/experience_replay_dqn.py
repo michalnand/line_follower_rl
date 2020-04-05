@@ -18,7 +18,7 @@ class Buffer():
         self.buffer = []
 
     def _init_zeros(self):
-        for _ in range(0, self.size):
+        for _ in range(0, self.size): 
             observation = numpy.zeros(self.observation_shape)
             q_values    = numpy.zeros(self.actions_count)
             self.buffer.append(Transition(observation, q_values, 0, 0.0, True))
