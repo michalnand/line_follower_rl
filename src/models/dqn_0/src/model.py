@@ -31,7 +31,7 @@ class Model(torch.nn.Module):
 
         self.model = nn.Sequential(*self.layers)
         self.model.to(self.device)
-
+ 
         print(self.model)
 
     def forward(self, state):
