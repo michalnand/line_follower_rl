@@ -43,15 +43,15 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
  
-        self.action_space = spaces.Discrete(4)
+        self.action_space = spaces.Discrete(2)
 
         self.actions = [] 
 
-        self.actions.append([0.0, 0.0])
-        self.actions.append([0.4, 0.4])
+        #self.actions.append([0.0, 0.0])
+        #self.actions.append([0.4, 0.4])
 
-        self.actions.append([0.4, 0.0])
-        self.actions.append([0.0, 0.4]) 
+        self.actions.append([0.3, 0.0])
+        self.actions.append([0.0, 0.3]) 
 
         
         '''
@@ -159,7 +159,7 @@ class LineFollowerEnv(gym.Env):
         self.reward = 0.0
 
         #too many time steps
-        if self.steps > 4096:
+        if self.steps > 16384:
             self.done = True
         #all line fields visited
         elif numpy.sum(self.visited_points) >= 0.98*self.line.get_length():
