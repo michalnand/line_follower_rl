@@ -62,14 +62,14 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.3, 0.0])
         self.actions.append([0.0, 0.3]) 
 
-        self.actions.append([0.5, 0.0])
-        self.actions.append([0.0, 0.5]) 
+        self.actions.append([0.3, 0.1])
+        self.actions.append([0.1, 0.3]) 
 
-        self.actions.append([0.6, 0.5])
-        self.actions.append([0.5, 0.6]) 
+        self.actions.append([0.4, 0.0])
+        self.actions.append([0.0, 0.4]) 
 
         self.actions.append([0.0, 0.0])
-        self.actions.append([0.7, 0.7]) 
+        self.actions.append([0.4, 0.4]) 
 
 
         self.pb_client = PybulletClient()
