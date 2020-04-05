@@ -16,10 +16,10 @@ class Model(torch.nn.Module):
         self.layers = [ 
                         Flatten(),  
 
-                        nn.Linear(3*4, 64),
+                        nn.Linear(input_shape[0], 256),
                         nn.ReLU(),  
 
-                        nn.Linear(64, 64),
+                        nn.Linear(256, 64),
                         nn.ReLU(),  
 
                         nn.Linear(64, outputs_count)

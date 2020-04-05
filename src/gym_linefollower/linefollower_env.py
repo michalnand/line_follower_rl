@@ -43,13 +43,19 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
  
-        self.action_space = spaces.Discrete(4)
+        self.action_space = spaces.Discrete(8)
 
         self.actions = []
         
       
+        self.actions.append([0.1, 0.0])
+        self.actions.append([0.0, 0.1])
+
         self.actions.append([0.2, 0.0])
         self.actions.append([0.0, 0.2])
+
+        self.actions.append([0.3, 0.2])
+        self.actions.append([0.2, 0.3])
 
         self.actions.append([0.0, 0.0])
         self.actions.append([0.3, 0.3])
@@ -154,7 +160,7 @@ class LineFollowerEnv(gym.Env):
             self.done   = True
         else:
             #small negative reward for not line following
-            self.reward = -1.0*numpy.clip(closest_distance*10.0, 0.0, 1.0)
+            self.reward = -1.0*numpy.clip(closest_distance*50.0, 0.0, 1.0)
             
             #positive reward for moving to next field
             if self.visited_points[closest_idx] == False:
@@ -247,11 +253,11 @@ class LineFollowerEnv(gym.Env):
 
 class LineFollowerEnvRawBasic(LineFollowerEnv):
     def __init__(self):
-        LineFollowerEnv.__init__(self, 4, "raw", "basic")
+        LineFollowerEnv.__init__(self, 8, "raw", "basic")
 
 class LineFollowerEnvRawAdvanced(LineFollowerEnv):
     def __init__(self):
-        LineFollowerEnv.__init__(self, 4, "raw", "advanced")
+        LineFollowerEnv.__init__(self, 8, "raw", "advanced")
 
 
 class LineFollowerEnvFrames1Basic(LineFollowerEnv):
