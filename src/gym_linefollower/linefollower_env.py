@@ -43,10 +43,18 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
  
-        self.action_space = spaces.Discrete(8)
+        self.action_space = spaces.Discrete(4)
 
         self.actions = [] 
+
+        self.actions.append([0.0, 0.0])
+        self.actions.append([0.4, 0.4])
+
+        self.actions.append([0.4, 0.0])
+        self.actions.append([0.0, 0.4]) 
+
         
+        '''
         self.actions.append([0.1, 0.0])
         self.actions.append([0.0, 0.1])
 
@@ -58,6 +66,7 @@ class LineFollowerEnv(gym.Env):
 
         self.actions.append([0.0, 0.0])
         self.actions.append([0.4, 0.4])
+        '''
 
         '''
         self.actions.append([0.1, 0.0])

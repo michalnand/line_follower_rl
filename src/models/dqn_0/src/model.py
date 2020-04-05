@@ -16,13 +16,13 @@ class Model(torch.nn.Module):
         self.layers = [ 
                         Flatten(),  
 
-                        nn.Linear(input_shape[0], 256),
+                        nn.Linear(input_shape[0], 64),
                         nn.ReLU(),  
 
-                        nn.Linear(256, 256),
+                        nn.Linear(64, 64),
                         nn.ReLU(),  
 
-                        nn.Linear(256, outputs_count)
+                        nn.Linear(64, outputs_count)
                     ]
 
         for i in range(len(self.layers)):
