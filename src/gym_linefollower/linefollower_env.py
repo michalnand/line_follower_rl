@@ -56,7 +56,7 @@ class LineFollowerEnv(gym.Env):
 
         self.action_space = spaces.Discrete(8)
 
-        self.actions = [] 
+        self.actions = []  
         
         
         self.actions.append([0.3, 0.0])
