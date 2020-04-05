@@ -11,8 +11,7 @@ class Model(torch.nn.Module):
         super(Model, self).__init__()
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
+        
         self.layers = [ 
                         Flatten(),  
 

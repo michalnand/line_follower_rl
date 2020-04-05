@@ -50,28 +50,17 @@ class LineFollowerEnv(gym.Env):
 
         self.actions.append([0.3, 0.0])
         self.actions.append([0.0, 0.3]) 
-
         '''
-
-
-        self.action_space = spaces.Discrete(8)
+        self.action_space = spaces.Discrete(4)
 
         self.actions = []  
-        
         
         self.actions.append([0.3, 0.0])
         self.actions.append([0.0, 0.3]) 
 
-        self.actions.append([0.3, 0.1])
-        self.actions.append([0.1, 0.3]) 
-
-        self.actions.append([0.4, 0.0])
-        self.actions.append([0.0, 0.4]) 
-
         self.actions.append([0.0, 0.0])
         self.actions.append([0.4, 0.4]) 
-
-
+       
         self.pb_client = PybulletClient()
         self.reset()
 
