@@ -1,33 +1,55 @@
-iterations                = 1609
+iterations                = 1823
 game_id                   = 1
-score                     = -243.5856899305031
-game_iterations           = 1609
-game_iterations_smooth    = 1609.0
-game_score                = -243.5856899305031
-game_score_smooth         = -243.5856899305031
-fps_smooth                = 530.7591404507083
+score                     = -776.5736312465996
+game_iterations           = 1823
+game_iterations_smooth    = 1823.0
+game_score                = -776.5736312465996
+game_score_smooth         = -776.5736312465996
+fps_smooth                = 417.514329199451
 
 
 
-iterations                = 2714
+iterations                = 2142
 game_id                   = 2
-score                     = -451.85598647562523
-game_iterations           = 1105
-game_iterations_smooth    = 1603.96
-game_score                = -208.27029654512185
-game_score_smooth         = -243.23253599664926
-fps_smooth                = 598.0247869567303
+score                     = -934.0533250369242
+game_iterations           = 319
+game_iterations_smooth    = 1807.96
+game_score                = -157.47969379032435
+game_score_smooth         = -770.3826918720368
+fps_smooth                = 409.9662590972562
 
 
 
-iterations                = 3854
+iterations                = 2495
 game_id                   = 3
-score                     = -669.2784332880498
-game_iterations           = 1140
-game_iterations_smooth    = 1599.3204
-game_score                = -217.42244681242468
-game_score_smooth         = -242.97443510480701
-fps_smooth                = 591.5099769297634
+score                     = -1064.8333594476285
+game_iterations           = 353
+game_iterations_smooth    = 1793.4104
+game_score                = -130.78003441070413
+game_score_smooth         = -763.9866652974235
+fps_smooth                = 410.8552680070493
+
+
+
+iterations                = 3225
+game_id                   = 4
+score                     = -1449.3105097632829
+game_iterations           = 730
+game_iterations_smooth    = 1782.776296
+game_score                = -384.47715031565644
+game_score_smooth         = -760.191570147606
+fps_smooth                = 413.13367621497366
+
+
+
+iterations                = 4286
+game_id                   = 5
+score                     = -2068.0381859476674
+game_iterations           = 1061
+game_iterations_smooth    = 1775.55853304
+game_score                = -618.7276761843831
+game_score_smooth         = -758.7769312079737
+fps_smooth                = 424.0208859482637
 
 
 

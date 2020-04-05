@@ -51,8 +51,8 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.2, 0.0])
         self.actions.append([0.0, 0.2])
 
-        #self.actions.append([0.0, 0.0])
-        #self.actions.append([0.3, 0.3])
+        self.actions.append([0.0, 0.0])
+        self.actions.append([0.3, 0.3])
 
 
         '''
