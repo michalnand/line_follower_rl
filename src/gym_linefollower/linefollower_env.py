@@ -44,13 +44,6 @@ class LineFollowerEnv(gym.Env):
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
 
         '''
-        self.action_space = spaces.Discrete(2)
-
-        self.actions = [] 
-
-        self.actions.append([0.3, 0.0])
-        self.actions.append([0.0, 0.3]) 
-        '''
         self.action_space = spaces.Discrete(4)
 
         self.actions = []  
@@ -60,7 +53,10 @@ class LineFollowerEnv(gym.Env):
 
         self.actions.append([0.0, 0.0])
         self.actions.append([0.4, 0.4]) 
-       
+        '''
+
+        self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=numpy.float32)
+
         self.pb_client = PybulletClient()
         self.reset()
 
@@ -103,7 +99,9 @@ class LineFollowerEnv(gym.Env):
         return self.observation
 
     def step(self, action):
-        left_power_target, right_power_target = self.actions[action]
+        #left_power_target, right_power_target = self.actions[action]
+
+        left_power_target, right_power_target = action[0], action[1]
         return self.step_continuous(left_power_target, right_power_target)
 
     def step_continuous(self, left_power_target, right_power_target):
@@ -134,7 +132,7 @@ class LineFollowerEnv(gym.Env):
             self.done   = True
             self.reward = 1.0
         #bot is too far away from line
-        elif closest_distance > 0.15:
+        elif closest_distance > 0.1:
             self.reward = -1.0
             self.done   = True
         else:
