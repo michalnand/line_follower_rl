@@ -54,7 +54,7 @@ class LineFollowerEnv(gym.Env):
         self.actions.append([0.0, 0.0])
         self.actions.append([0.4, 0.4]) 
         '''
-
+        
         self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=numpy.float32)
 
         self.pb_client = PybulletClient()
@@ -99,6 +99,7 @@ class LineFollowerEnv(gym.Env):
         return self.observation
 
     def step(self, action):
+
         #left_power_target, right_power_target = self.actions[action]
 
         left_power_target, right_power_target = action[0], action[1]

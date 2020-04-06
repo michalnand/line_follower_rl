@@ -12,8 +12,8 @@ class Model(torch.nn.Module):
         self.input_shape    = input_shape
         self.outputs_count  = outputs_count
         
-        features_count = 128
-
+        features_count = 256
+ 
         self.features_layers = [ 
                                     nn.Linear(input_shape[0], features_count),
                                     nn.ReLU(),                      
@@ -83,7 +83,7 @@ class Model(torch.nn.Module):
         self.model_features.load_state_dict(torch.load(path + "trained/model_features.pt", map_location = self.device))
         self.model_mu.load_state_dict(torch.load(path + "trained/model_mu.pt", map_location = self.device))
         self.model_var.load_state_dict(torch.load(path + "trained/model_var.pt", map_location = self.device))
-        self.model_advantage.load_state_dict(torch.load(path + "trained/model_critic.pt", map_location = self.device))
+        self.model_critic.load_state_dict(torch.load(path + "trained/model_critic.pt", map_location = self.device))
     
         self.model_features.eval() 
         self.model_mu.eval() 
