@@ -26,7 +26,7 @@ import models.a2c.src.config
 model  = models.a2c.src.model
 config = models.a2c.src.config.Config()
  
-agent = agents.a2c_continuous.Agent(envs, model, config, save_path)
+agent = agents.a2c_continuous.Agent(envs, model, config, save_path, save_stats=False)
 
 agent.load()
 agent.disable_training()
