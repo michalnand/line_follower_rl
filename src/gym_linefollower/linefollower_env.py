@@ -104,7 +104,7 @@ class LineFollowerEnv(gym.Env):
 
     def step(self, action):
         
-        if isinstance(action, (list, np.ndarray)):
+        if isinstance(action, (list, numpy.ndarray)):
             left_power_target, right_power_target = action[0], action[1] 
         else:
             left_power_target, right_power_target = self.actions[action]
