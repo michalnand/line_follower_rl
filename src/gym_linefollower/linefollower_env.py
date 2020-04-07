@@ -43,19 +43,23 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
 
-        '''
-        self.action_space = spaces.Discrete(4)
+        self.action_space = spaces.Discrete(8)
 
         self.actions = []  
         
-        self.actions.append([0.3, 0.0])
-        self.actions.append([0.0, 0.3]) 
+        self.actions.append([0.4, 0.0])
+        self.actions.append([0.0, 0.4]) 
+
+        self.actions.append([0.3, 0.1])
+        self.actions.append([0.1, 0.3]) 
 
         self.actions.append([0.0, 0.0])
         self.actions.append([0.4, 0.4]) 
-        '''
+
+        self.actions.append([0.4, 0.3])
+        self.actions.append([0.3, 0.4]) 
         
-        self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=numpy.float32)
+        #self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=numpy.float32)
 
         self.pb_client = PybulletClient()
         self.reset()
@@ -99,10 +103,11 @@ class LineFollowerEnv(gym.Env):
         return self.observation
 
     def step(self, action):
-
-        #left_power_target, right_power_target = self.actions[action]
-
-        left_power_target, right_power_target = action[0], action[1]
+        
+        if isinstance(action, int)
+            left_power_target, right_power_target = self.actions[action]
+        else:
+            left_power_target, right_power_target = action[0], action[1] 
         return self.step_continuous(left_power_target, right_power_target)
 
     def step_continuous(self, left_power_target, right_power_target):
