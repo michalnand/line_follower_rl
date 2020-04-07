@@ -12,13 +12,11 @@ class Model(torch.nn.Module):
         self.input_shape    = input_shape
         self.outputs_count  = outputs_count
         
-        features_count = 64
+        features_count = 256
  
         self.features_layers = [ 
-                                    nn.Linear(input_shape[0], 64),
-                                    nn.ReLU(),                      
-                                    nn.Linear(64, features_count),
-                                    nn.ReLU(),                      
+                                    nn.Linear(input_shape[0], features_count),
+                                    nn.ReLU()                                      
                             ]
 
         self.layers_mu = [
