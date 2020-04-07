@@ -104,7 +104,7 @@ class LineFollowerEnv(gym.Env):
 
     def step(self, action):
         
-        if isinstance(action, int)
+        if isinstance(action, int):
             left_power_target, right_power_target = self.actions[action]
         else:
             left_power_target, right_power_target = action[0], action[1] 
