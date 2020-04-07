@@ -58,5 +58,10 @@ class ObservationFrames:
         frame = cv2.resize(frame, (self.width, self.height), interpolation=cv2.INTER_AREA)
         return frame
 
+    def _draw_fig(self, image):
+
+        cv2.imshow("line follower", image)  
+        cv2.waitKey(1)
+
 
    

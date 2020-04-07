@@ -38,8 +38,8 @@ class LineFollowerEnv(gym.Env):
             self.obs = ObservationRaw(frame_stacking)  
             self.observation_space = spaces.Box(low=-1.0, high=1.0, shape=(3*frame_stacking, ), dtype=numpy.float)
         else:
-            width  = 96 
-            height = 96     
+            width  = 32 
+            height = 32     
             self.obs = ObservationFrames(width, height, frame_stacking)
             self.observation_space = spaces.Box(low=0, high=1.0, shape=(frame_stacking, height, width), dtype=numpy.float)
 
@@ -100,6 +100,7 @@ class LineFollowerEnv(gym.Env):
 
         self.observation = self._update_observation()
 
+     
         return self.observation
 
     def step(self, action):
@@ -151,6 +152,7 @@ class LineFollowerEnv(gym.Env):
                 self.visited_points[closest_idx] = True
 
         self.observation = self._update_observation()
+
         return self.observation, self.reward, self.done, self.info
         
     def render(self, mode = None):
@@ -203,8 +205,11 @@ class LineFollowerEnv(gym.Env):
 
     def _get_camera_view(self, width = 256, height = 256):
         robot_x, robot_y, robot_z, pitch, roll, yaw = self.bot.get_position()
-        return self.bot.get_image(yaw*180.0/self.pi - 90, -15.0, 0.0, 0.015, robot_x, robot_y, robot_z + 0.1, width = width, height = height, fov=60)
-
+        r  = 0.15
+        cam_dx = r*numpy.cos(yaw)
+        cam_dy = r*numpy.sin(yaw)
+        return self.bot.get_image(yaw*180.0/self.pi - 90, -60.0, 0.0, 0.025, robot_x + cam_dx, robot_y + cam_dy, robot_z + 0.04, width = width, height = height, fov=120)
+    
     def _update_observation(self):
         if self.state_type == "raw":
 
@@ -213,7 +218,7 @@ class LineFollowerEnv(gym.Env):
             left_velocity, right_velocity = self.bot.get_wheel_velocity()
             self.obs.process(line_position, left_velocity, right_velocity)
         else:
-            frame = self._get_camera_view()
+            frame   = self._get_camera_view(32, 32)
             self.obs.process(frame)
 
         return self.obs.get()

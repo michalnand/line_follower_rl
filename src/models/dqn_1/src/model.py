@@ -12,17 +12,24 @@ class Model(torch.nn.Module):
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+        height = input_shape[1]
+        width  = input_shape[2]
+
+        fc_inputs = (width//(2**3))*(height//(2**3))*16
 
         self.layers = [ 
-                        nn.Conv1d(input_shape[0], 32, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv2d(input_shape[0], 8, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
 
-                        nn.Conv1d(32, 32, kernel_size = 3, stride = 2, padding = 1),
-                        nn.ReLU(),  
+                        nn.Conv2d(8, 16, kernel_size = 3, stride = 2, padding = 1),
+                        nn.ReLU(),
 
+                        nn.Conv2d(16, 16, kernel_size = 3, stride = 2, padding = 1),
+                        nn.ReLU(),
+ 
                         Flatten(),  
 
-                        nn.Linear(4*32, 256),
+                        nn.Linear(fc_inputs, 256),
                         nn.ReLU(),  
 
                         nn.Linear(256, outputs_count)
@@ -51,7 +58,7 @@ class Model(torch.nn.Module):
     def save(self, path):
         name = path + "trained/model.pt"
         print("saving", name)
-        torch.save(self.model.state_dict(), name)
+        torch.save(self.model.state_dict(), name) 
 
     def load(self, path):
         name = path + "trained/model.pt"
