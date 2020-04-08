@@ -15,16 +15,16 @@ class Model(torch.nn.Module):
         height = input_shape[1]
         width  = input_shape[2]
 
-        fc_inputs = (width//(2**3))*(height//(2**3))*16
+        fc_inputs = (width//(2**3))*(height//(2**3))*32
 
         self.layers = [ 
-                        nn.Conv2d(input_shape[0], 8, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv2d(input_shape[0], 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
 
-                        nn.Conv2d(8, 16, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv2d(32, 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
 
-                        nn.Conv2d(16, 16, kernel_size = 3, stride = 2, padding = 1),
+                        nn.Conv2d(32, 32, kernel_size = 3, stride = 2, padding = 1),
                         nn.ReLU(),
  
                         Flatten(),  
