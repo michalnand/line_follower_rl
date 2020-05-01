@@ -1,4 +1,4 @@
-#include "convolution.h"
+#include "conv2D.h"
 #include <stdint.h>
 
 
@@ -118,6 +118,7 @@ template<   unsigned int kernel_size,
             class acc_data_type = int16_t>
 void conv2D_kernel(     io_data_type *output_buffer, 
                         io_data_type *input_buffer, 
+                        io_data_type *bias_buffer,
                         io_data_type *kernel, 
 
                         unsigned int output_channels,
@@ -152,6 +153,7 @@ void conv2D_kernel(     io_data_type *output_buffer,
                 }
 
                 result = result/127;
+                result+= bias_buffer[kernel_idx];
 
                 if (result > 127)
                     result = 127;
@@ -174,6 +176,7 @@ void conv2D_kernel(     io_data_type *output_buffer,
 
 void conv2D(    int8_t *output_buffer, 
                 int8_t *input_buffer, 
+                int8_t *bias_buffer,
                 int8_t *kernel, 
 
                 unsigned int output_channels,
@@ -188,6 +191,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 1, int8_t, int16_t>(   output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,
@@ -201,6 +205,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 4, int8_t, int16_t>(   output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,
@@ -214,6 +219,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 8, int8_t, int16_t>(   output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,
@@ -227,6 +233,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 16, int8_t, int16_t>(  output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,
@@ -240,6 +247,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 32, int8_t, int16_t>(  output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,
@@ -253,6 +261,7 @@ void conv2D(    int8_t *output_buffer,
     {
         conv2D_kernel<3, 64, int8_t, int16_t>(  output_buffer, 
                                                 input_buffer, 
+                                                bias_buffer,
                                                 kernel, 
 
                                                 output_channels,

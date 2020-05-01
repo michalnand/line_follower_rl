@@ -4,8 +4,9 @@ amazing project of embedded line follower robot using neural networks, trained w
 
 
 ## line_detection_train
-supervised line detector network
-ultra tiny network, for line detection, works well and can run on small MCU
+supervised line detector network,
+this is ultra tiny network, for line detection, works well and can run on small MCU
+for 512x512 input cam run more than 120FPS on i5 (CPU only, no GPU)
 
 
 ![](images/line_detection.gif)
