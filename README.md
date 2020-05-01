@@ -19,6 +19,15 @@ network architecture :
 - convolution 3x3x32, stride 2, activation ReLU
 - convolution 1x1x1, stride 1, output 6x6 feature map of line detection
 
+thanks this MASSIVE UNROLLING you can worm up stm32f7 to maximum power :
+
+idea is simple : 
+- in common CNN feature layers ordering is : input\[channel\]\[y\]\[x\] , kernel\[filter\]\[channel\]\[ky\]\[kx\]
+- here, the channel last reordering is used input\[y\]\[x\]\[channel\] , kernel\[filter\]\[ky\]\[kx\]\[channel\]
+- we know, kx size is usualy 3, and channel is HUGE (32, 64, 128 ...), so : combination \[kx\]\[channel\] is long vector (3x32, 3x64, 3x128), and can be massive unrolled
+
+![](images/unrolled_kernel.png)
+
 
 ## ai_gym_train 
 
