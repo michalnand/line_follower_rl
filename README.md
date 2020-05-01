@@ -26,7 +26,7 @@ idea is simple :
 - here, the channel last reordering is used input\[y\]\[x\]\[channel\] , kernel\[filter\]\[ky\]\[kx\]\[channel\]
 - we know, kx size is usualy 3, and channel is HUGE (32, 64, 128 ...), so : combination \[kx\]\[channel\] is long vector (3x32, 3x64, 3x128), and can be massive unrolled
 
-![](images/unrolled_kernel.png){:height="25%" width="25%"}
+![](images/unrolled_kernel.png)
 
 
 
