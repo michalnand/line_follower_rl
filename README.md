@@ -44,3 +44,8 @@ robot itself, powered by stm32f7, overclocked from 216MHz to 300MHz
 ![](images/robot.jpg)
 ![](images/robot_thermal.png)
 ![](images/cpu_thermal.png)
+
+new board version, motors are about to change
+
+![](images/osh_top.png)
+![](images/board.png)
