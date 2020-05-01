@@ -19,6 +19,26 @@ network architecture :
 - convolution 3x3x32, stride 2, activation ReLU
 - convolution 1x1x1, stride 1, output 6x6 feature map of line detection
 
+torch model skeleton looks like : 
+```python
+self.layers = [ 
+                nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),
+                nn.ReLU(), 
+
+                nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
+                nn.ReLU(), 
+
+                nn.Conv2d(8, 16, kernel_size=3, stride=2, padding=1),
+                nn.ReLU(), 
+
+                nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),
+                nn.ReLU(), 
+                       
+                nn.Dropout(0.01),
+                nn.Conv2d(32, 1, kernel_size=1, stride=1, padding=0)
+            ]
+```
+
 thanks this MASSIVE UNROLLING you can worm up stm32f7 to maximum power :
 
 idea is simple : 
