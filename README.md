@@ -1,4 +1,4 @@
-# end-to-end reinfrocement learning line following robot
+# end-to-end reinforcement learning line following robot
 
 amazing project of embedded line follower robot using neural networks, trained with reinforcement learning
 
@@ -20,7 +20,7 @@ network architecture :
 - convolution 1x1x1, stride 1, output 6x6 feature map of line detection
 
 
-## ai_gym_train
+## ai_gym_train 
 
 reinfrocement learning off-line training, in custom AI gym env
 
