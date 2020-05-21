@@ -15,8 +15,8 @@ class Model(torch.nn.Module):
         self.outputs_count  = outputs_count
         
         input_channels  = self.input_shape[0]
-        input_height = self.input_shape[1]
-        input_width  = self.input_shape[2]    
+        input_height    = self.input_shape[1]
+        input_width     = self.input_shape[2]    
 
         ratio           = 2**4 
 

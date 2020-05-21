@@ -1,20 +1,22 @@
-#ifndef _CONV_2D_H_
-#define _CONV_2D_H_
+#ifndef _Conv2d_H_
+#define _Conv2d_H_
 
 #include <stdint.h>
 
-void conv2D(    int8_t *output_buffer, 
+void Conv2d(    int8_t *output_buffer, 
                 int8_t *input_buffer, 
-                int8_t *bias_buffer,
-                int8_t *kernel, 
+                const int8_t *bias_buffer,
+                const int8_t *kernel, 
+                int32_t scale,
 
                 unsigned int output_channels,
+                unsigned int input_channels,
                 unsigned int height, 
                 unsigned int width,
-                unsigned int input_channels,
+
+                unsigned int kernel_size = 3,
                 
-                unsigned int stride = 1,
-                bool relu = false);
+                unsigned int stride = 1);
 
 
 

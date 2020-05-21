@@ -52,7 +52,7 @@ idea is simple :
 
 ## ai_gym_train 
 
-reinfrocement learning off-line training, in custom AI gym env
+reinforcement learning off-line training, in custom AI gym env
 
 ![](images/dqn_line_follower.gif)
 

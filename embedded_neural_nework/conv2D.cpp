@@ -1,11 +1,9 @@
-#include "conv2D.h"
-#include <stdint.h>
-
+#include <Conv2d.h>
 
 template<const unsigned int kernel_size, const unsigned int input_channels, class io_data_type = int8_t, class acc_data_type = int16_t>
 int32_t microkernel(const io_data_type *input,  const io_data_type *kernel)
 {
-    register int32_t result = 0;
+    int32_t result = 0;
 
     unsigned int input_idx  = 0;
     unsigned int kernel_idx = 0;
@@ -116,16 +114,16 @@ template<   unsigned int kernel_size,
             unsigned int input_channels, 
             class io_data_type = int8_t, 
             class acc_data_type = int16_t>
-void conv2D_kernel(     io_data_type *output_buffer, 
+void Conv2d_kernel(     io_data_type *output_buffer, 
                         io_data_type *input_buffer, 
-                        io_data_type *bias_buffer,
-                        io_data_type *kernel, 
+                        const io_data_type *bias_buffer,
+                        const io_data_type *kernel, 
+                        int32_t       scale,
 
                         unsigned int output_channels,
                         unsigned int height, 
                         unsigned int width,
-                        unsigned int stride,
-                        bool relu)
+                        unsigned int stride)
 {
 
     unsigned int k_half         = (kernel_size - 1)/2;
@@ -138,7 +136,7 @@ void conv2D_kernel(     io_data_type *output_buffer,
             {
                 unsigned int kernel_idx = filter*kernel_size*kernel_size*input_channels;
 
-                io_data_type *kernel_ =  &(kernel[kernel_idx]);
+                const io_data_type *kernel_ =  &(kernel[kernel_idx]);
 
                 int32_t result = 0;
 
@@ -152,17 +150,13 @@ void conv2D_kernel(     io_data_type *output_buffer,
                     kernel_+= kernel_size*input_channels;
                 }
 
-                result = result/127;
-                result+= bias_buffer[kernel_idx];
-
+                result = ((result + bias_buffer[kernel_idx])*scale)/(128*127);
+               
                 if (result > 127)
                     result = 127;
                 
                 if (result < -127)
                     result = -127;
-
-                if (relu && result < 0)
-                    result = 0;
 
                 unsigned int x_output = x/stride + k_half;
                 unsigned int y_output = y/stride + k_half;
@@ -174,101 +168,193 @@ void conv2D_kernel(     io_data_type *output_buffer,
 
 
 
-void conv2D(    int8_t *output_buffer, 
+void Conv2d(    int8_t *output_buffer, 
                 int8_t *input_buffer, 
-                int8_t *bias_buffer,
-                int8_t *kernel, 
+                const int8_t *bias_buffer,
+                const int8_t *kernel, 
+                int32_t scale,
 
                 unsigned int output_channels,
+                unsigned int input_channels,
                 unsigned int height, 
                 unsigned int width,
-                unsigned int input_channels,
-                unsigned int stride,
-                bool relu)
+                unsigned int kernel_size,
+                unsigned int stride)
 {
-
-    if (input_channels == 1) 
+    if (kernel_size == 1)
     {
-        conv2D_kernel<3, 1, int8_t, int16_t>(   output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+        if (input_channels == 1) 
+        {
+            Conv2d_kernel<1, 1, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
 
-                                                output_channels,
-                                                height, 
-                                                width,
+                                                    output_channels,
+                                                    height, 
+                                                    width,
 
-                                                stride,
-                                                relu);
+                                                    stride);
+        }
+        else if (input_channels == 4) 
+        {
+            Conv2d_kernel<1, 4, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+
+                                                    stride);
+        }
+        else if (input_channels == 8)
+        {
+            Conv2d_kernel<1, 8, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel,
+                                                    scale, 
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 16)
+        {
+            Conv2d_kernel<1, 16, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 32)
+        {
+            Conv2d_kernel<1, 32, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 64)
+        {
+            Conv2d_kernel<1, 64, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
     }
-    else if (input_channels == 4) 
+
+
+    if (kernel_size == 3)
     {
-        conv2D_kernel<3, 4, int8_t, int16_t>(   output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+        if (input_channels == 1) 
+        {
+            Conv2d_kernel<3, 1, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
 
-                                                output_channels,
-                                                height, 
-                                                width,
+                                                    output_channels,
+                                                    height, 
+                                                    width,
 
-                                                stride,
-                                                relu);
-    }
-    else if (input_channels == 8)
-    {
-        conv2D_kernel<3, 8, int8_t, int16_t>(   output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+                                                    stride);
+        }
+        else if (input_channels == 4) 
+        {
+            Conv2d_kernel<3, 4, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
 
-                                                output_channels,
-                                                height, 
-                                                width,
-                                                
-                                                stride,
-                                                relu);
-    }
-    else if (input_channels == 16)
-    {
-        conv2D_kernel<3, 16, int8_t, int16_t>(  output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+                                                    output_channels,
+                                                    height, 
+                                                    width,
 
-                                                output_channels,
-                                                height, 
-                                                width,
-                                                
-                                                stride,
-                                                relu);
-    }
-    else if (input_channels == 32)
-    {
-        conv2D_kernel<3, 32, int8_t, int16_t>(  output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+                                                    stride);
+        }
+        else if (input_channels == 8)
+        {
+            Conv2d_kernel<3, 8, int8_t, int16_t>(   output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
 
-                                                output_channels,
-                                                height, 
-                                                width,
-                                                
-                                                stride,
-                                                relu);
-    }
-    else if (input_channels == 64)
-    {
-        conv2D_kernel<3, 64, int8_t, int16_t>(  output_buffer, 
-                                                input_buffer, 
-                                                bias_buffer,
-                                                kernel, 
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 16)
+        {
+            Conv2d_kernel<3, 16, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
 
-                                                output_channels,
-                                                height, 
-                                                width,
-                                                
-                                                stride,
-                                                relu);
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 32)
+        {
+            Conv2d_kernel<3, 32, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
+        else if (input_channels == 64)
+        {
+            Conv2d_kernel<3, 64, int8_t, int16_t>(  output_buffer, 
+                                                    input_buffer, 
+                                                    bias_buffer,
+                                                    kernel, 
+                                                    scale,
+
+                                                    output_channels,
+                                                    height, 
+                                                    width,
+                                                    
+                                                    stride);
+        }
     }
 }
