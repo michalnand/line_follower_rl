@@ -565,6 +565,7 @@ void LineNetwork::forward()
 	Conv2d(	output_buffer(), input_buffer(),
 		LineNetwork_layer_0_bias, LineNetwork_layer_0_weights, 
 		55, 8, 1, 96, 96, 3, 2);
+
 	swap_buffer();
 
 	ReLU(	output_buffer(), input_buffer(), 18432);

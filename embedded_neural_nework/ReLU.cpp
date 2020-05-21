@@ -50,12 +50,12 @@ void ReLU(  int8_t *output_buffer,
             int8_t *input_buffer, 
             unsigned int size)
 {
-    while (size > RELU_BLOCK_SIZE)
+    while (size >= RELU_BLOCK_SIZE)
     {
         ReLU_kernel(output_buffer, input_buffer);
 
         output_buffer+= RELU_BLOCK_SIZE;
-        input_buffer+= RELU_BLOCK_SIZE;
+        input_buffer+=  RELU_BLOCK_SIZE;
 
         size-= RELU_BLOCK_SIZE;
     } 

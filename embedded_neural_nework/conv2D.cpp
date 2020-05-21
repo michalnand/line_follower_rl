@@ -150,9 +150,9 @@ void Conv2d_kernel(     io_data_type *output_buffer,
                     kernel_+= kernel_size*input_channels;
                 }
 
-                result = ((result + bias_buffer[kernel_idx])*scale)/(128*127);
+                result = ((result + bias_buffer[kernel_idx])*scale)/(128*128);
                
-                if (result > 127)
+                if (result > 127) 
                     result = 127;
                 
                 if (result < -127)

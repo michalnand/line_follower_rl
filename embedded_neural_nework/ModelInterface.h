@@ -17,10 +17,12 @@ class ModelInterface
 
         virtual void forward();
 
-    protected:
-        void init_buffer(unsigned int size);
+    public:
         int8_t* input_buffer();
         int8_t* output_buffer();
+
+    protected:
+        void init_buffer(unsigned int size);
         void swap_buffer();
 
     protected:
