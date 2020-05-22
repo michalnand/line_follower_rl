@@ -1,5 +1,7 @@
 #include <Linear.h>
 
+
+
 int32_t dot_kernel(int8_t *va, int8_t *vb, unsigned int size)
 {
     int32_t result     = 0;
@@ -104,7 +106,7 @@ void Linear(    int8_t *output_buffer,
                 
                 int8_t *weights, 
                 int8_t *bias, 
-                int32_t scale,
+                int8_t scale,
 
                 unsigned int input_size,
                 unsigned int output_size)

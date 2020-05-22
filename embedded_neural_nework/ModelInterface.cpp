@@ -11,7 +11,8 @@ ModelInterface::ModelInterface()
 
 ModelInterface::~ModelInterface()
 {
-
+    delete buffer_a;
+    delete buffer_b;
 }
 
 void ModelInterface::forward()

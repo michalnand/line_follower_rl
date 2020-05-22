@@ -4,24 +4,6 @@ import numpy
 from models.net_1.model import Model
 
 
-'''
-void Conv2d(    int8_t *output_buffer, 
-                int8_t *input_buffer, 
-                int8_t *bias_buffer,
-                int8_t *kernel, 
-
-                unsigned int output_channels,
-                unsigned int height, 
-                unsigned int width,
-                unsigned int input_channels,
-
-                unsigned int kernel_size = 3,
-                
-                unsigned int stride = 1,
-                
-                bool relu = true);
-'''
-
 class ExportNetwork:
     def __init__(self, model, input_height, input_width, input_channels, network_prefix = "LineNetwork"):
 
@@ -30,6 +12,7 @@ class ExportNetwork:
         self.network_prefix = network_prefix
 
         max_required_memory = input_shape[0]*input_shape[1]*input_shape[2]
+        total_macs          = 0
 
         code_weights = ""
         code_network = ""
@@ -37,19 +20,23 @@ class ExportNetwork:
             layer = model.layers[i]
             
             if isinstance(layer, torch.nn.Conv2d):
-                code, output_shape, required_memory = self.export_Conv2d(layer, input_shape, i)
+                code, output_shape, required_memory, macs = self.export_Conv2d(layer, input_shape, i)
 
                 code_network+= code[0]
                 code_weights+= code[1]
+
+                total_macs+= macs
 
                 if i == 0:
                     input_channels = layer.weight.shape[1]
 
             elif isinstance(layer, torch.nn.ReLU):
-                code, output_shape, required_memory = self.export_ReLU(layer, input_shape, i)
+                code, output_shape, required_memory, macs = self.export_ReLU(layer, input_shape, i)
 
                 code_network+= code[0]
                 code_weights+= code[1]
+
+                total_macs+= macs
 
             
 
@@ -59,7 +46,8 @@ class ExportNetwork:
                 max_required_memory = required_memory
 
 
-        print("required memory for one buffer= ", max_required_memory, "[bytes]")
+        print("required memory for one buffer = ", max_required_memory, "[bytes]")
+        print("total MACS                     = ", total_macs)
 
 
         self.code_h = ""
@@ -133,18 +121,6 @@ class ExportNetwork:
         input_size      = weights.shape[1]
         output_size     = weights.shape[0]
         
-        '''
-        void Linear(    int8_t *output_buffer, 
-                int8_t *input_buffer, 
-                
-                int8_t *weights, 
-                int8_t *bias, 
-                int32_t *scale,
-
-                unsigned int input_size,
-                unsigned int output_size);
-        '''
-
         #layer call code
         code_network = "\tConv2d(" + "\t" + "output_buffer(), input_buffer()," + "\n"
         code_network+= "\t\t" + layer_id + "_bias" + ", " + layer_id + "_weights" + ", " + "\n"
@@ -179,9 +155,10 @@ class ExportNetwork:
 
 
         code = (code_network, code_weight)
+        macs = 2*output_size*input_size + 2*output_size
 
 
-        return code, (output_size, ), output_size
+        return code, (output_size, ), output_size, macs
 
 
 
@@ -195,7 +172,7 @@ class ExportNetwork:
 
         weights_quant, bias_quant, scale = self.quantize(weights, bias)
 
-        scale_round = int(scale*128)
+        scale_rounded = int(scale*128)
 
 
         output_channels = kernel_shape[0]
@@ -210,7 +187,7 @@ class ExportNetwork:
         #layer call code
         code_network = "\tConv2d(" + "\t" + "output_buffer(), input_buffer()," + "\n"
         code_network+= "\t\t" + layer_id + "_bias" + ", " + layer_id + "_weights" + ", " + "\n"
-        code_network+= "\t\t" + str(scale_round) + ", " 
+        code_network+= "\t\t" + str(scale_rounded) + ", " 
         code_network+= str(output_channels) + ", "
         code_network+= str(input_channels) + ", "
         code_network+= str(input_height) + ", "
@@ -226,9 +203,11 @@ class ExportNetwork:
                 for kw in range(kernel_shape[3]):
                     for ch in range(kernel_shape[1]):
                         code_weight+= str(weights_quant[k][ch][kh][kw]) + ", " 
+                        
                     if ch > 1:
                         code_weight+= "\n"
-            if ch == 0:
+
+            if kernel_shape[1] == 1:
                 code_weight+= "\n"
 
         code_weight+= "};\n\n"
@@ -244,6 +223,10 @@ class ExportNetwork:
         
         required_memory       = output_shape[0]*output_shape[1]*output_shape[2]
 
+        macs = 2*output_channels*(kernel_size**2)*input_channels*output_shape[1]*output_shape[2] #convolution
+        macs+= 2*output_channels*output_shape[1]*output_shape[2]    #bias
+
+
 
         print("export_Conv2d :")
         print("output_channels ", output_channels)
@@ -253,11 +236,12 @@ class ExportNetwork:
         print("kernel_size     ", kernel_size)
         print("stride          ", kernel_stride)
         print("output_shape    ", output_shape)
+        print("macs            ", macs)
         print("\n\n")
 
 
 
-        return code, output_shape, required_memory
+        return code, output_shape, required_memory, macs
     
     def export_ReLU(self, layer, input_shape, layer_num):
         
@@ -269,24 +253,25 @@ class ExportNetwork:
 
         code = (code_network, "", "")
 
+        macs = 4*size
+
         print("export_ReLU :")
         print("output_channels ", output_shape[0])
         print("input_height    ", output_shape[1])
         print("input_width     ", output_shape[2])
+        print("macs            ", macs)
         print("\n\n")
       
-        return code, output_shape, size
+        return code, output_shape, size, macs
 
 
     def quantize(self, weights, bias):
-
         tmp         = numpy.concatenate([weights.flatten(), bias.flatten()])
         scale       = numpy.std(tmp)*2
-        #scale       = numpy.max(numpy.abs(tmp))
         
         result_weights  = numpy.clip((weights*128)/scale, -127, 127).astype(numpy.int8)
         result_bias     = numpy.clip((bias*128)/scale, -127, 127).astype(numpy.int8)
-
+ 
         return result_weights, result_bias, scale
         
 

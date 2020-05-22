@@ -8,7 +8,6 @@
 #include <ReLU.h>
 
 
-
 class ModelInterface
 {
     public:
