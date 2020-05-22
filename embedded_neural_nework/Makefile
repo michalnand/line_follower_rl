@@ -2,7 +2,7 @@ INC = -I.
 CC 	= g++
 
 
-CFLAGS = -O3 -Wall -Wextra -pedantic -std=c++11
+CFLAGS = -O3 -Wall -Wextra -pedantic -std=c++17
 
 
 SRCS = $(shell find . -name '*.cpp')

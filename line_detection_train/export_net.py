@@ -42,11 +42,16 @@ class ExportNetwork:
                 code_network+= code[0]
                 code_weights+= code[1]
 
+                if i == 0:
+                    input_channels = layer.weight.shape[1]
+
             elif isinstance(layer, torch.nn.ReLU):
                 code, output_shape, required_memory = self.export_ReLU(layer, input_shape, i)
 
                 code_network+= code[0]
                 code_weights+= code[1]
+
+            
 
             input_shape = output_shape
 
@@ -86,6 +91,12 @@ class ExportNetwork:
         self.code_cpp+= "\t: ModelInterface()\n"
         self.code_cpp+= "{\n"
         self.code_cpp+= "\t" + "init_buffer(" + str(max_required_memory) + ");\n"
+        self.code_cpp+= "\t" + "input_channels = "  + str(input_channels) + ";\n"
+        self.code_cpp+= "\t" + "input_height = "  + str(input_height) + ";\n"
+        self.code_cpp+= "\t" + "input_width = "   + str(input_width) + ";\n"
+        self.code_cpp+= "\t" + "output_channels = " + str(output_shape[0]) + ";\n"
+        self.code_cpp+= "\t" + "output_height = " + str(output_shape[1]) + ";\n"
+        self.code_cpp+= "\t" + "output_width = "  + str(output_shape[2]) + ";\n"
         self.code_cpp+= "}\n\n"
 
 
@@ -97,13 +108,81 @@ class ExportNetwork:
 
         #print(self.code_cpp)
 
-        cpp_file = open(self.network_prefix + ".cpp", "w")
+        cpp_file = open("../embedded_neural_nework_test/" + self.network_prefix + ".cpp", "w")
         cpp_file.write(self.code_cpp)
         cpp_file.close() 
                 
-        h_file = open(self.network_prefix + ".h", "w")
+        h_file = open("../embedded_neural_nework_test/" + self.network_prefix + ".h", "w")
         h_file.write(self.code_h)
         h_file.close()
+
+    def export_Linear(self, layer, input_shape, layer_num):
+        #TODO
+        
+        layer_id = self.network_prefix + "_" + "layer_" + str(layer_num)
+
+        weights      = layer.weight.data.detach().to("cpu").numpy()
+        kernel_shape = weights.shape
+
+        bias = layer.bias.data.detach().to("cpu").numpy()
+
+        weights_quant, bias_quant, scale = self.quantize(weights, bias)
+
+        scale_round = int(scale*128)
+
+        input_size      = weights.shape[1]
+        output_size     = weights.shape[0]
+        
+        '''
+        void Linear(    int8_t *output_buffer, 
+                int8_t *input_buffer, 
+                
+                int8_t *weights, 
+                int8_t *bias, 
+                int32_t *scale,
+
+                unsigned int input_size,
+                unsigned int output_size);
+        '''
+
+        #layer call code
+        code_network = "\tConv2d(" + "\t" + "output_buffer(), input_buffer()," + "\n"
+        code_network+= "\t\t" + layer_id + "_bias" + ", " + layer_id + "_weights" + ", " + "\n"
+        code_network+= "\t\t" + str(scale_round) + ", " 
+        code_network+= str(output_channels) + ", "
+        code_network+= str(input_channels) + ", "
+        code_network+= str(input_height) + ", "
+        code_network+= str(input_width) + ", "
+        code_network+= str(kernel_size) + ", "
+        code_network+= str(kernel_stride) + ");\n"
+        code_network+= "\tswap_buffer();" + "\n\n"
+
+        #weights
+        code_weight = "const int8_t " + layer_id + "_weights[] = {" + "\n"
+        for k in range(kernel_shape[0]):
+            for kh in range(kernel_shape[2]):
+                for kw in range(kernel_shape[3]):
+                    for ch in range(kernel_shape[1]):
+                        code_weight+= str(weights_quant[k][ch][kh][kw]) + ", " 
+                    if ch > 1:
+                        code_weight+= "\n"
+            if ch == 0:
+                code_weight+= "\n"
+
+        code_weight+= "};\n\n"
+        
+        #bias
+        code_weight+= "const int8_t "  + layer_id + "_bias[] = {" + "\n"
+        for i in range(len(bias)):
+            code_weight+= str(bias_quant[i]) + ", " 
+        code_weight+= "};\n\n\n"
+
+
+        code = (code_network, code_weight)
+
+
+        return code, (output_size, ), output_size
+
 
 
     def export_Conv2d(self, layer, input_shape, layer_num):
@@ -112,7 +191,7 @@ class ExportNetwork:
         weights = layer.weight.data.detach().to("cpu").numpy()
         kernel_shape = weights.shape
 
-        bias = layer.bias.data.detach().to("cpu").numpy()
+        bias    = layer.bias.data.detach().to("cpu").numpy()
 
         weights_quant, bias_quant, scale = self.quantize(weights, bias)
 
@@ -203,18 +282,19 @@ class ExportNetwork:
 
         tmp         = numpy.concatenate([weights.flatten(), bias.flatten()])
         scale       = numpy.std(tmp)*2
+        #scale       = numpy.max(numpy.abs(tmp))
         
-        result_weights  = numpy.clip((weights*127)/scale, -127, 127).astype(numpy.int8)
-        result_bias     = numpy.clip((bias*127)/scale, -127, 127).astype(numpy.int8)
+        result_weights  = numpy.clip((weights*128)/scale, -127, 127).astype(numpy.int8)
+        result_bias     = numpy.clip((bias*128)/scale, -127, 127).astype(numpy.int8)
 
         return result_weights, result_bias, scale
         
 
             
+ 
 
-
-model_input_height      = 96
-model_input_width       = 96
+model_input_height      = 512
+model_input_width       = 512
 model_output_channels   = 1
 
 model = Model((1, model_input_height, model_input_width), model_output_channels)

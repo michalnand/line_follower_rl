@@ -21,6 +21,10 @@ class ModelInterface
         int8_t* input_buffer();
         int8_t* output_buffer();
 
+    public:
+        unsigned int input_channels, input_height, input_width;
+        unsigned int output_channels, output_height, output_width;
+
     protected:
         void init_buffer(unsigned int size);
         void swap_buffer();

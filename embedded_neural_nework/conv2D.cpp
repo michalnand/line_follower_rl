@@ -1,11 +1,11 @@
 #include <Conv2d.h>
 
 template<const unsigned int kernel_size, const unsigned int input_channels, class io_data_type = int8_t, class acc_data_type = int16_t>
-int32_t microkernel(const io_data_type *input,  const io_data_type *kernel)
+acc_data_type microkernel(const io_data_type *input,  const io_data_type *kernel)
 {
-    int32_t result = 0;
+    acc_data_type result = 0;
 
-    unsigned int input_idx  = 0;
+    unsigned int input_idx  = 0; 
     unsigned int kernel_idx = 0;
     
     if (input_channels%32 == 0)
@@ -149,7 +149,7 @@ void Conv2d_kernel(     io_data_type *output_buffer,
                     result+= microkernel<kernel_size, input_channels>(input_buffer_, kernel_);
                     kernel_+= kernel_size*input_channels;
                 }
-
+                
                 result = ((result + bias_buffer[kernel_idx])*scale)/(128*128);
                
                 if (result > 127) 
@@ -185,7 +185,7 @@ void Conv2d(    int8_t *output_buffer,
     {
         if (input_channels == 1) 
         {
-            Conv2d_kernel<1, 1, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<1, 1, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -199,7 +199,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 4) 
         {
-            Conv2d_kernel<1, 4, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<1, 4, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -213,7 +213,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 8)
         {
-            Conv2d_kernel<1, 8, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<1, 8, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel,
@@ -227,7 +227,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 16)
         {
-            Conv2d_kernel<1, 16, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<1, 16, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -241,7 +241,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 32)
         {
-            Conv2d_kernel<1, 32, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<1, 32, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -255,7 +255,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 64)
         {
-            Conv2d_kernel<1, 64, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<1, 64, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -268,13 +268,13 @@ void Conv2d(    int8_t *output_buffer,
                                                     stride);
         }
     }
-
+    
 
     if (kernel_size == 3)
     {
         if (input_channels == 1) 
         {
-            Conv2d_kernel<3, 1, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<3, 1, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -286,9 +286,10 @@ void Conv2d(    int8_t *output_buffer,
 
                                                     stride);
         }
+        
         else if (input_channels == 4) 
         {
-            Conv2d_kernel<3, 4, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<3, 4, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -302,7 +303,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 8)
         {
-            Conv2d_kernel<3, 8, int8_t, int16_t>(   output_buffer, 
+            Conv2d_kernel<3, 8, int8_t, int32_t>(   output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -316,7 +317,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 16)
         {
-            Conv2d_kernel<3, 16, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<3, 16, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -330,7 +331,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 32)
         {
-            Conv2d_kernel<3, 32, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<3, 32, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
@@ -344,7 +345,7 @@ void Conv2d(    int8_t *output_buffer,
         }
         else if (input_channels == 64)
         {
-            Conv2d_kernel<3, 64, int8_t, int16_t>(  output_buffer, 
+            Conv2d_kernel<3, 64, int8_t, int32_t>(  output_buffer, 
                                                     input_buffer, 
                                                     bias_buffer,
                                                     kernel, 
