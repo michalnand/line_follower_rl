@@ -290,8 +290,8 @@ class ExportNetwork:
             
  
 
-model_input_height      = 512
-model_input_width       = 512
+model_input_height      = 96
+model_input_width       = 96
 model_output_channels   = 1
 
 model = Model((1, model_input_height, model_input_width), model_output_channels)

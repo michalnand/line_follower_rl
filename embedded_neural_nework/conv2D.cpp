@@ -1,5 +1,4 @@
 #include <Conv2d.h>
-#include <iostream>
 
 template<const unsigned int kernel_size, const unsigned int input_channels, class io_data_type, class acc_data_type >
 acc_data_type microkernel(const io_data_type *input,  const io_data_type *kernel)
