@@ -19,7 +19,15 @@ class ExportNetwork:
         for i in range(len(model.layers)):
             layer = model.layers[i]
             
-            if isinstance(layer, torch.nn.Conv2d):
+            if isinstance(layer, torch.nn.Linear):
+                code, output_shape, required_memory, macs = self.export_Linear(layer, input_shape, i)
+
+                code_network+= code[0]
+                code_weights+= code[1]
+
+                total_macs+= macs
+
+            elif isinstance(layer, torch.nn.Conv2d):
                 code, output_shape, required_memory, macs = self.export_Conv2d(layer, input_shape, i)
 
                 code_network+= code[0]
@@ -83,8 +91,17 @@ class ExportNetwork:
         self.code_cpp+= "\t" + "input_height = "  + str(input_height) + ";\n"
         self.code_cpp+= "\t" + "input_width = "   + str(input_width) + ";\n"
         self.code_cpp+= "\t" + "output_channels = " + str(output_shape[0]) + ";\n"
-        self.code_cpp+= "\t" + "output_height = " + str(output_shape[1]) + ";\n"
-        self.code_cpp+= "\t" + "output_width = "  + str(output_shape[2]) + ";\n"
+
+        if len(output_shape) > 1:
+            self.code_cpp+= "\t" + "output_height = " + str(output_shape[1]) + ";\n"
+        else:
+            self.code_cpp+= "\t" + "output_height = " + str(1) + ";\n"
+
+        if len(output_shape) > 2:
+            self.code_cpp+= "\t" + "output_width = " + str(output_shape[2]) + ";\n"
+        else:
+            self.code_cpp+= "\t" + "output_width = " + str(1) + ";\n"
+
         self.code_cpp+= "}\n\n"
 
 
@@ -104,9 +121,7 @@ class ExportNetwork:
         h_file.write(self.code_h)
         h_file.close()
 
-    def export_Linear(self, layer, input_shape, layer_num):
-        #TODO
-        
+    def export_Linear(self, layer, input_shape, layer_num):        
         layer_id = self.network_prefix + "_" + "layer_" + str(layer_num)
 
         weights      = layer.weight.data.detach().to("cpu").numpy()
@@ -122,28 +137,20 @@ class ExportNetwork:
         output_size     = weights.shape[0]
         
         #layer call code
-        code_network = "\tConv2d(" + "\t" + "output_buffer(), input_buffer()," + "\n"
+        code_network = "\tLinear(" + "\t" + "output_buffer(), input_buffer()," + "\n"
         code_network+= "\t\t" + layer_id + "_bias" + ", " + layer_id + "_weights" + ", " + "\n"
         code_network+= "\t\t" + str(scale_round) + ", " 
-        code_network+= str(output_channels) + ", "
-        code_network+= str(input_channels) + ", "
-        code_network+= str(input_height) + ", "
-        code_network+= str(input_width) + ", "
-        code_network+= str(kernel_size) + ", "
-        code_network+= str(kernel_stride) + ");\n"
+        code_network+= str(input_size) + ", "
+        code_network+= str(output_size) + ");\n"
         code_network+= "\tswap_buffer();" + "\n\n"
 
         #weights
         code_weight = "const int8_t " + layer_id + "_weights[] = {" + "\n"
-        for k in range(kernel_shape[0]):
-            for kh in range(kernel_shape[2]):
-                for kw in range(kernel_shape[3]):
-                    for ch in range(kernel_shape[1]):
-                        code_weight+= str(weights_quant[k][ch][kh][kw]) + ", " 
-                    if ch > 1:
-                        code_weight+= "\n"
-            if ch == 0:
-                code_weight+= "\n"
+        for j in range(output_size):
+            for i in range(input_size):
+                code_weight+= str(weights_quant[j][i]) + ", " 
+                  
+            code_weight+= "\n"
 
         code_weight+= "};\n\n"
         
@@ -156,6 +163,13 @@ class ExportNetwork:
 
         code = (code_network, code_weight)
         macs = 2*output_size*input_size + 2*output_size
+
+
+        print("export_Linear :")
+        print("output_size    ", output_size)
+        print("input_size     ", input_size)
+        print("macs           ", macs)
+        print("\n\n")
 
 
         return code, (output_size, ), output_size, macs
@@ -256,9 +270,7 @@ class ExportNetwork:
         macs = 4*size
 
         print("export_ReLU :")
-        print("output_channels ", output_shape[0])
-        print("input_height    ", output_shape[1])
-        print("input_width     ", output_shape[2])
+        print("IO shape        ", output_shape)
         print("macs            ", macs)
         print("\n\n")
       

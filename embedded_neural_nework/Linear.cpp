@@ -2,7 +2,7 @@
 
 
 
-int32_t dot_kernel(int8_t *va, int8_t *vb, unsigned int size)
+int32_t dot_kernel(const int8_t *va, const int8_t *vb, unsigned int size)
 {
     int32_t result     = 0;
     unsigned int idx   = 0;
@@ -103,9 +103,9 @@ int32_t dot_kernel(int8_t *va, int8_t *vb, unsigned int size)
  
 void Linear(    int8_t *output_buffer, 
                 int8_t *input_buffer, 
-                
-                int8_t *weights, 
-                int8_t *bias, 
+
+                const int8_t *bias, 
+                const int8_t *weights, 
                 int8_t scale,
 
                 unsigned int input_size,

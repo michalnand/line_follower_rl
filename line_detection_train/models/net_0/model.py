@@ -18,28 +18,31 @@ class Model(torch.nn.Module):
         input_height    = self.input_shape[1]
         input_width     = self.input_shape[2]    
 
-        ratio           = 2**4 
+        ratio           = 2**5 
 
         fc_inputs_count = ((input_width)//ratio)*((input_height)//ratio)
  
         self.layers = [ 
-                        nn.Conv2d(input_channels, 8, kernel_size=3, stride=2, padding=1),
-                        nn.ReLU(), 
-
-                        nn.Conv2d(8, 8, kernel_size=3, stride=2, padding=1),
-                        nn.ReLU(), 
-
-                        nn.Conv2d(8, 16, kernel_size=3, stride=2, padding=1),
+                        nn.Conv2d(input_channels, 16, kernel_size=3, stride=2, padding=1),
                         nn.ReLU(), 
 
                         nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1),
                         nn.ReLU(), 
+
+                        nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),
+                        nn.ReLU(), 
+
+                        nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
+                        nn.ReLU(), 
+
+                        nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
+                        nn.ReLU(), 
                        
                         Flatten(), 
                         
-                        nn.Dropout(0.01),
+                        nn.Dropout(0.05),
 
-                        nn.Linear(32*fc_inputs_count, outputs_count)
+                        nn.Linear(64*fc_inputs_count, outputs_count)
                     ]
 
         for i in range(len(self.layers)):

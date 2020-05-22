@@ -5,9 +5,9 @@
 
 void Linear(    int8_t *output_buffer, 
                 int8_t *input_buffer, 
-                
-                int8_t *weights, 
-                int8_t *bias, 
+
+                const int8_t *bias, 
+                const int8_t *weights, 
                 int8_t scale,
 
                 unsigned int input_size,

@@ -1,4 +1,5 @@
 #include <Conv2d.h>
+#include <iostream>
 
 template<const unsigned int kernel_size, const unsigned int input_channels, class io_data_type, class acc_data_type >
 acc_data_type microkernel(const io_data_type *input,  const io_data_type *kernel)
@@ -66,7 +67,7 @@ acc_data_type microkernel(const io_data_type *input,  const io_data_type *kernel
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
-        } 
+        }
     }
     else if (input_channels%8 == 0)
     {

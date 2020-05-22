@@ -4,14 +4,14 @@ bin/embedded_neural_nework_test.elf:	file format Mach-O 64-bit x86-64
 
 Disassembly of section __TEXT,__text:
 
-00000001000021a0 __Z10dot_kernelPaS_j:
+00000001000021a0 __Z10dot_kernelPKaS0_j:
 1000021a0: 55                          	pushq	%rbp
 1000021a1: 48 89 e5                    	movq	%rsp, %rbp
 1000021a4: 41 56                       	pushq	%r14
 1000021a6: 53                          	pushq	%rbx
 1000021a7: 31 c0                       	xorl	%eax, %eax
 1000021a9: 83 fa 20                    	cmpl	$32, %edx
-1000021ac: 0f 82 36 01 00 00           	jb	310 <__Z10dot_kernelPaS_j+0x148>
+1000021ac: 0f 82 36 01 00 00           	jb	310 <__Z10dot_kernelPKaS0_j+0x148>
 1000021b2: 83 c2 e0                    	addl	$-32, %edx
 1000021b5: 89 d0                       	movl	%edx, %eax
 1000021b7: c1 e8 05                    	shrl	$5, %eax
@@ -19,7 +19,7 @@ Disassembly of section __TEXT,__text:
 1000021be: 45 89 c8                    	movl	%r9d, %r8d
 1000021c1: 41 83 e0 01                 	andl	$1, %r8d
 1000021c5: 85 c0                       	testl	%eax, %eax
-1000021c7: 0f 84 f0 03 00 00           	je	1008 <__Z10dot_kernelPaS_j+0x41d>
+1000021c7: 0f 84 f0 03 00 00           	je	1008 <__Z10dot_kernelPKaS0_j+0x41d>
 1000021cd: 45 29 c1                    	subl	%r8d, %r9d
 1000021d0: 31 c9                       	xorl	%ecx, %ecx
 1000021d2: 31 c0                       	xorl	%eax, %eax
@@ -73,24 +73,24 @@ Disassembly of section __TEXT,__text:
 1000022d2: 44 01 d0                    	addl	%r10d, %eax
 1000022d5: 48 83 c1 40                 	addq	$64, %rcx
 1000022d9: 41 83 c1 fe                 	addl	$-2, %r9d
-1000022dd: 0f 85 fd fe ff ff           	jne	-259 <__Z10dot_kernelPaS_j+0x40>
-1000022e3: e9 d9 02 00 00              	jmp	729 <__Z10dot_kernelPaS_j+0x421>
+1000022dd: 0f 85 fd fe ff ff           	jne	-259 <__Z10dot_kernelPKaS0_j+0x40>
+1000022e3: e9 d9 02 00 00              	jmp	729 <__Z10dot_kernelPKaS0_j+0x421>
 1000022e8: 45 31 db                    	xorl	%r11d, %r11d
 1000022eb: 83 fa 10                    	cmpl	$16, %edx
-1000022ee: 0f 83 61 03 00 00           	jae	865 <__Z10dot_kernelPaS_j+0x4b5>
+1000022ee: 0f 83 61 03 00 00           	jae	865 <__Z10dot_kernelPKaS0_j+0x4b5>
 1000022f4: 45 89 d9                    	movl	%r11d, %r9d
 1000022f7: 83 fa 08                    	cmpl	$8, %edx
-1000022fa: 0f 83 e8 04 00 00           	jae	1256 <__Z10dot_kernelPaS_j+0x648>
+1000022fa: 0f 83 e8 04 00 00           	jae	1256 <__Z10dot_kernelPKaS0_j+0x648>
 100002300: 45 89 c8                    	movl	%r9d, %r8d
 100002303: 85 d2                       	testl	%edx, %edx
-100002305: 0f 84 bc 05 00 00           	je	1468 <__Z10dot_kernelPaS_j+0x727>
+100002305: 0f 84 bc 05 00 00           	je	1468 <__Z10dot_kernelPKaS0_j+0x727>
 10000230b: 83 fa 1f                    	cmpl	$31, %edx
-10000230e: 0f 86 ad 01 00 00           	jbe	429 <__Z10dot_kernelPaS_j+0x321>
+10000230e: 0f 86 ad 01 00 00           	jbe	429 <__Z10dot_kernelPKaS0_j+0x321>
 100002314: 8d 4a ff                    	leal	-1(%rdx), %ecx
 100002317: 44 89 c3                    	movl	%r8d, %ebx
 10000231a: f7 d3                       	notl	%ebx
 10000231c: 39 d9                       	cmpl	%ebx, %ecx
-10000231e: 0f 87 9d 01 00 00           	ja	413 <__Z10dot_kernelPaS_j+0x321>
+10000231e: 0f 87 9d 01 00 00           	ja	413 <__Z10dot_kernelPKaS0_j+0x321>
 100002324: 41 89 d1                    	movl	%edx, %r9d
 100002327: 41 83 e1 e0                 	andl	$-32, %r9d
 10000232b: c5 79 6e c0                 	vmovd	%eax, %xmm8
@@ -101,7 +101,7 @@ Disassembly of section __TEXT,__text:
 10000233a: 41 89 ca                    	movl	%ecx, %r10d
 10000233d: 41 83 e2 01                 	andl	$1, %r10d
 100002341: 85 c0                       	testl	%eax, %eax
-100002343: 0f 84 86 05 00 00           	je	1414 <__Z10dot_kernelPaS_j+0x72f>
+100002343: 0f 84 86 05 00 00           	je	1414 <__Z10dot_kernelPKaS0_j+0x72f>
 100002349: 44 29 d1                    	subl	%r10d, %ecx
 10000234c: c5 f1 ef c9                 	vpxor	%xmm1, %xmm1, %xmm1
 100002350: 45 31 db                    	xorl	%r11d, %r11d
@@ -146,9 +146,9 @@ Disassembly of section __TEXT,__text:
 100002415: 41 83 c3 40                 	addl	$64, %r11d
 100002419: 83 c0 40                    	addl	$64, %eax
 10000241c: 83 c1 fe                    	addl	$-2, %ecx
-10000241f: 0f 85 3b ff ff ff           	jne	-197 <__Z10dot_kernelPaS_j+0x1c0>
+10000241f: 0f 85 3b ff ff ff           	jne	-197 <__Z10dot_kernelPKaS0_j+0x1c0>
 100002425: 45 85 d2                    	testl	%r10d, %r10d
-100002428: 74 5b                       	je	91 <__Z10dot_kernelPaS_j+0x2e5>
+100002428: 74 5b                       	je	91 <__Z10dot_kernelPKaS0_j+0x2e5>
 10000242a: 45 01 c3                    	addl	%r8d, %r11d
 10000242d: c4 a2 79 20 44 1e 18        	vpmovsxbw	24(%rsi,%r11), %xmm0
 100002434: c4 a2 79 20 54 1f 18        	vpmovsxbw	24(%rdi,%r11), %xmm2
@@ -177,13 +177,13 @@ Disassembly of section __TEXT,__text:
 1000024aa: c5 f9 fe c1                 	vpaddd	%xmm1, %xmm0, %xmm0
 1000024ae: c5 f9 7e c0                 	vmovd	%xmm0, %eax
 1000024b2: 44 39 ca                    	cmpl	%r9d, %edx
-1000024b5: 0f 84 0c 04 00 00           	je	1036 <__Z10dot_kernelPaS_j+0x727>
+1000024b5: 0f 84 0c 04 00 00           	je	1036 <__Z10dot_kernelPKaS0_j+0x727>
 1000024bb: 45 01 c8                    	addl	%r9d, %r8d
 1000024be: 44 29 ca                    	subl	%r9d, %edx
 1000024c1: 44 8d 4a ff                 	leal	-1(%rdx), %r9d
 1000024c5: 41 89 d2                    	movl	%edx, %r10d
 1000024c8: 41 83 e2 07                 	andl	$7, %r10d
-1000024cc: 74 21                       	je	33 <__Z10dot_kernelPaS_j+0x34f>
+1000024cc: 74 21                       	je	33 <__Z10dot_kernelPKaS0_j+0x34f>
 1000024ce: 31 c9                       	xorl	%ecx, %ecx
 1000024d0: 41 8d 1c 08                 	leal	(%r8,%rcx), %ebx
 1000024d4: 44 0f be 1c 1f              	movsbl	(%rdi,%rbx), %r11d
@@ -192,11 +192,11 @@ Disassembly of section __TEXT,__text:
 1000024e1: 01 d8                       	addl	%ebx, %eax
 1000024e3: ff c1                       	incl	%ecx
 1000024e5: 41 39 ca                    	cmpl	%ecx, %r10d
-1000024e8: 75 e6                       	jne	-26 <__Z10dot_kernelPaS_j+0x330>
+1000024e8: 75 e6                       	jne	-26 <__Z10dot_kernelPKaS0_j+0x330>
 1000024ea: 41 01 c8                    	addl	%ecx, %r8d
 1000024ed: 29 ca                       	subl	%ecx, %edx
 1000024ef: 41 83 f9 07                 	cmpl	$7, %r9d
-1000024f3: 0f 82 ce 03 00 00           	jb	974 <__Z10dot_kernelPaS_j+0x727>
+1000024f3: 0f 82 ce 03 00 00           	jb	974 <__Z10dot_kernelPKaS0_j+0x727>
 1000024f9: 31 c9                       	xorl	%ecx, %ecx
 1000024fb: 0f 1f 44 00 00              	nopl	(%rax,%rax)
 100002500: 41 8d 1c 08                 	leal	(%r8,%rcx), %ebx
@@ -248,14 +248,14 @@ Disassembly of section __TEXT,__text:
 1000025ab: 01 d8                       	addl	%ebx, %eax
 1000025ad: 83 c1 08                    	addl	$8, %ecx
 1000025b0: 39 ca                       	cmpl	%ecx, %edx
-1000025b2: 0f 85 48 ff ff ff           	jne	-184 <__Z10dot_kernelPaS_j+0x360>
-1000025b8: e9 0a 03 00 00              	jmp	778 <__Z10dot_kernelPaS_j+0x727>
+1000025b2: 0f 85 48 ff ff ff           	jne	-184 <__Z10dot_kernelPKaS0_j+0x360>
+1000025b8: e9 0a 03 00 00              	jmp	778 <__Z10dot_kernelPKaS0_j+0x727>
 1000025bd: 31 c9                       	xorl	%ecx, %ecx
 1000025bf: 31 c0                       	xorl	%eax, %eax
 1000025c1: 41 89 d3                    	movl	%edx, %r11d
 1000025c4: 41 83 e3 e0                 	andl	$-32, %r11d
 1000025c8: 45 85 c0                    	testl	%r8d, %r8d
-1000025cb: 74 78                       	je	120 <__Z10dot_kernelPaS_j+0x4a5>
+1000025cb: 74 78                       	je	120 <__Z10dot_kernelPKaS0_j+0x4a5>
 1000025cd: c4 e2 7d 21 44 0f 08        	vpmovsxbd	8(%rdi,%rcx), %ymm0
 1000025d4: c4 e2 7d 21 4c 0f 18        	vpmovsxbd	24(%rdi,%rcx), %ymm1
 1000025db: c4 e2 7d 21 14 0f           	vpmovsxbd	(%rdi,%rcx), %ymm2
@@ -282,7 +282,7 @@ Disassembly of section __TEXT,__text:
 100002645: 44 29 da                    	subl	%r11d, %edx
 100002648: 41 83 c3 20                 	addl	$32, %r11d
 10000264c: 83 fa 10                    	cmpl	$16, %edx
-10000264f: 0f 82 9f fc ff ff           	jb	-865 <__Z10dot_kernelPaS_j+0x154>
+10000264f: 0f 82 9f fc ff ff           	jb	-865 <__Z10dot_kernelPKaS0_j+0x154>
 100002655: 44 8d 42 f0                 	leal	-16(%rdx), %r8d
 100002659: 45 89 c2                    	movl	%r8d, %r10d
 10000265c: 41 83 e2 f0                 	andl	$-16, %r10d
@@ -386,11 +386,11 @@ Disassembly of section __TEXT,__text:
 1000027c9: 41 83 c3 10                 	addl	$16, %r11d
 1000027cd: 83 c2 f0                    	addl	$-16, %edx
 1000027d0: 83 fa 0f                    	cmpl	$15, %edx
-1000027d3: 0f 87 97 fe ff ff           	ja	-361 <__Z10dot_kernelPaS_j+0x4d0>
+1000027d3: 0f 87 97 fe ff ff           	ja	-361 <__Z10dot_kernelPKaS0_j+0x4d0>
 1000027d9: 45 29 d0                    	subl	%r10d, %r8d
 1000027dc: 44 89 c2                    	movl	%r8d, %edx
 1000027df: 83 fa 08                    	cmpl	$8, %edx
-1000027e2: 0f 82 18 fb ff ff           	jb	-1256 <__Z10dot_kernelPaS_j+0x160>
+1000027e2: 0f 82 18 fb ff ff           	jb	-1256 <__Z10dot_kernelPKaS0_j+0x160>
 1000027e8: 44 8d 52 f8                 	leal	-8(%rdx), %r10d
 1000027ec: 45 89 d3                    	movl	%r10d, %r11d
 1000027ef: 41 83 e3 f8                 	andl	$-8, %r11d
@@ -446,11 +446,11 @@ Disassembly of section __TEXT,__text:
 1000028a9: 41 83 c1 08                 	addl	$8, %r9d
 1000028ad: 83 c2 f8                    	addl	$-8, %edx
 1000028b0: 83 fa 07                    	cmpl	$7, %edx
-1000028b3: 0f 87 47 ff ff ff           	ja	-185 <__Z10dot_kernelPaS_j+0x660>
+1000028b3: 0f 87 47 ff ff ff           	ja	-185 <__Z10dot_kernelPKaS0_j+0x660>
 1000028b9: 45 29 da                    	subl	%r11d, %r10d
 1000028bc: 44 89 d2                    	movl	%r10d, %edx
 1000028bf: 85 d2                       	testl	%edx, %edx
-1000028c1: 0f 85 44 fa ff ff           	jne	-1468 <__Z10dot_kernelPaS_j+0x16b>
+1000028c1: 0f 85 44 fa ff ff           	jne	-1468 <__Z10dot_kernelPKaS0_j+0x16b>
 1000028c7: 5b                          	popq	%rbx
 1000028c8: 41 5e                       	popq	%r14
 1000028ca: 5d                          	popq	%rbp
@@ -461,11 +461,11 @@ Disassembly of section __TEXT,__text:
 1000028d6: c5 e1 ef db                 	vpxor	%xmm3, %xmm3, %xmm3
 1000028da: c4 41 31 ef c9              	vpxor	%xmm9, %xmm9, %xmm9
 1000028df: 45 85 d2                    	testl	%r10d, %r10d
-1000028e2: 0f 85 42 fb ff ff           	jne	-1214 <__Z10dot_kernelPaS_j+0x28a>
-1000028e8: e9 98 fb ff ff              	jmp	-1128 <__Z10dot_kernelPaS_j+0x2e5>
+1000028e2: 0f 85 42 fb ff ff           	jne	-1214 <__Z10dot_kernelPKaS0_j+0x28a>
+1000028e8: e9 98 fb ff ff              	jmp	-1128 <__Z10dot_kernelPKaS0_j+0x2e5>
 1000028ed: 0f 1f 00                    	nopl	(%rax)
 
-00000001000028f0 __Z6LinearPaS_S_S_ajj:
+00000001000028f0 __Z6LinearPaS_PKaS1_ajj:
 1000028f0: 55                          	pushq	%rbp
 1000028f1: 48 89 e5                    	movq	%rsp, %rbp
 1000028f4: 41 57                       	pushq	%r15
@@ -480,26 +480,26 @@ Disassembly of section __TEXT,__text:
 10000290d: 48 89 7d d0                 	movq	%rdi, -48(%rbp)
 100002911: 8b 45 10                    	movl	16(%rbp), %eax
 100002914: 85 c0                       	testl	%eax, %eax
-100002916: 74 71                       	je	113 <__Z6LinearPaS_S_S_ajj+0x99>
+100002916: 74 71                       	je	113 <__Z6LinearPaS_PKaS1_ajj+0x99>
 100002918: 44 89 cb                    	movl	%r9d, %ebx
 10000291b: 45 0f be f0                 	movsbl	%r8b, %r14d
 10000291f: 41 89 c7                    	movl	%eax, %r15d
 100002922: 45 31 e4                    	xorl	%r12d, %r12d
 100002925: 45 31 ed                    	xorl	%r13d, %r13d
-100002928: eb 19                       	jmp	25 <__Z6LinearPaS_S_S_ajj+0x53>
+100002928: eb 19                       	jmp	25 <__Z6LinearPaS_PKaS1_ajj+0x53>
 10000292a: 66 0f 1f 44 00 00           	nopw	(%rax,%rax)
 100002930: 48 8b 4d d0                 	movq	-48(%rbp), %rcx
 100002934: 42 88 04 29                 	movb	%al, (%rcx,%r13)
 100002938: 49 ff c5                    	incq	%r13
 10000293b: 41 01 dc                    	addl	%ebx, %r12d
 10000293e: 4d 39 ef                    	cmpq	%r13, %r15
-100002941: 74 46                       	je	70 <__Z6LinearPaS_S_S_ajj+0x99>
+100002941: 74 46                       	je	70 <__Z6LinearPaS_PKaS1_ajj+0x99>
 100002943: 44 89 e6                    	movl	%r12d, %esi
-100002946: 48 03 75 c0                 	addq	-64(%rbp), %rsi
+100002946: 48 03 75 b8                 	addq	-72(%rbp), %rsi
 10000294a: 48 8b 7d c8                 	movq	-56(%rbp), %rdi
 10000294e: 89 da                       	movl	%ebx, %edx
-100002950: e8 4b f8 ff ff              	callq	-1973 <__Z10dot_kernelPaS_j>
-100002955: 48 8b 4d b8                 	movq	-72(%rbp), %rcx
+100002950: e8 4b f8 ff ff              	callq	-1973 <__Z10dot_kernelPKaS0_j>
+100002955: 48 8b 4d c0                 	movq	-64(%rbp), %rcx
 100002959: 42 0f be 0c 29              	movsbl	(%rcx,%r13), %ecx
 10000295e: 01 c1                       	addl	%eax, %ecx
 100002960: 41 0f af ce                 	imull	%r14d, %ecx
@@ -509,12 +509,12 @@ Disassembly of section __TEXT,__text:
 10000296c: 01 c8                       	addl	%ecx, %eax
 10000296e: c1 f8 0e                    	sarl	$14, %eax
 100002971: 3d 80 00 00 00              	cmpl	$128, %eax
-100002976: 7c 05                       	jl	5 <__Z6LinearPaS_S_S_ajj+0x8d>
+100002976: 7c 05                       	jl	5 <__Z6LinearPaS_PKaS1_ajj+0x8d>
 100002978: b8 7f 00 00 00              	movl	$127, %eax
 10000297d: 83 f8 81                    	cmpl	$-127, %eax
-100002980: 7f ae                       	jg	-82 <__Z6LinearPaS_S_S_ajj+0x40>
+100002980: 7f ae                       	jg	-82 <__Z6LinearPaS_PKaS1_ajj+0x40>
 100002982: b8 81 00 00 00              	movl	$129, %eax
-100002987: eb a7                       	jmp	-89 <__Z6LinearPaS_S_S_ajj+0x40>
+100002987: eb a7                       	jmp	-89 <__Z6LinearPaS_PKaS1_ajj+0x40>
 100002989: 48 83 c4 28                 	addq	$40, %rsp
 10000298d: 5b                          	popq	%rbx
 10000298e: 41 5c                       	popq	%r12
