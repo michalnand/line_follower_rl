@@ -5,7 +5,7 @@ void ReLU(  int8_t *output_buffer,
             int8_t *input_buffer, 
             unsigned int size)
 {
-    while (size >=4 )
+    while (size >=4)
     {
         if (input_buffer[0] < 0)
             output_buffer[0] = 0;
@@ -29,7 +29,7 @@ void ReLU(  int8_t *output_buffer,
 
         output_buffer+= 4;
         input_buffer+= 4;
-        size-=4;
+        size-= 4;
     }    
 
     while (size > 0)

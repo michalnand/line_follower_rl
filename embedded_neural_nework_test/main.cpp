@@ -39,18 +39,44 @@ cv::Mat get_prediction(cv::Mat &frame, ModelInterface &model, float threshold = 
     cv::Mat prediction(cv::Size(model.output_height, model.output_width), CV_8U);
 
     idx = 0;
-    for (unsigned int y = 0; y < model.output_height; y++)
-        for (unsigned int x = 0; x < model.output_width; x++)
-        {
-            int8_t v = model.output_buffer()[idx];
-            
-            if (v > 127*threshold) 
-                prediction.at<uint8_t>(y, x) = 255;
-            else
-                prediction.at<uint8_t>(y, x) = 0;
 
-            idx++;
-        }
+    if (model.output_channels == 1)
+    {
+        for (unsigned int y = 0; y < model.output_height; y++)
+            for (unsigned int x = 0; x < model.output_width; x++)
+            {
+                int8_t v = model.output_buffer()[idx]; idx++;
+
+               if (v > 127*threshold)
+                    prediction.at<uint8_t>(y, x) = 1;
+                else
+                    prediction.at<uint8_t>(y, x) = 0; 
+            }
+    }
+    else
+    {
+        for (unsigned int y = 0; y < model.output_height; y++)
+            for (unsigned int x = 0; x < model.output_width; x++)
+            {
+                unsigned int class_id = 0;
+                int8_t v_max = -127;
+
+                for (unsigned int ch = 0; ch < model.output_channels; ch++)
+                {
+                    int8_t v = model.output_buffer()[idx]; idx++;
+                    if (v > v_max)
+                    {
+                        class_id = ch;
+                        v_max    = v;
+                    }
+                }
+                
+                if (v_max > 127*threshold)
+                    prediction.at<uint8_t>(y, x) = class_id;
+                else
+                    prediction.at<uint8_t>(y, x) = 0;
+            }
+    }
 
     return prediction;
 }
@@ -68,23 +94,20 @@ int main()
     {
         cv::Mat frame;
         cap >> frame;
-        if(frame.empty()) 
+        if( frame.empty()) 
             break;
 
-    
         char c = (char)cv::waitKey(25);
         if (c == 27)
             break;
 
         double time_start = get_time();
-        auto prediction   = get_prediction(frame, model, 0.08);
+        auto prediction   = 255*get_prediction(frame, model, 0.08);
         double time_stop  = get_time();
 
         cv::Mat prediction_resized(cv::Size(frame.cols, frame.rows), CV_8U);
         cv::resize(prediction, prediction_resized, cv::Size(frame.cols, frame.rows), 0, 0, cv::INTER_LINEAR);
      
-        
-
         cv::Mat result(cv::Size(frame.cols, frame.rows), CV_8UC3, cv::Scalar(0, 0, 0));
 
         result = frame;
@@ -107,8 +130,6 @@ int main()
         imshow("frame", result) ;
     }
 
-
     std::cout << "program done\n";
-
 	return 0;
 }

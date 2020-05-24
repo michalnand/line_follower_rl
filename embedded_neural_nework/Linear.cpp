@@ -95,6 +95,7 @@ int32_t dot_kernel(const int8_t *va, const int8_t *vb, unsigned int size)
     while (size != 0)
     {                  
         result+= (int16_t)va[idx]*(int16_t)vb[idx]; idx++;
+        
         size--;
     }
 

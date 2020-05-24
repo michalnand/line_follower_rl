@@ -49,7 +49,7 @@ acc_data_type microkernel(const io_data_type *input,  const io_data_type *kernel
     else if (input_channels%16 == 0)
     {
         for (unsigned int i = 0; i < kernel_size*input_channels; i+=16)
-        {    
+        {     
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
             result+= (acc_data_type)kernel[kernel_idx]*(acc_data_type)input[input_idx]; kernel_idx++; input_idx++;
@@ -171,7 +171,7 @@ void Conv2d_kernel(     io_data_type *output_buffer,
 template<   unsigned int kernel_size, 
             class io_data_type, 
             class acc_data_type>
-void Conv2d_kernel1(     io_data_type *output_buffer, 
+void Conv2d_kernel1(    io_data_type *output_buffer, 
                         io_data_type *input_buffer, 
                         const io_data_type *bias_buffer,
                         const io_data_type *kernel, 
@@ -191,7 +191,7 @@ void Conv2d_kernel1(     io_data_type *output_buffer,
     {
         unsigned int kernel_idx = filter*kernel_size*kernel_size;
         const io_data_type *kernel_ =  &(kernel[kernel_idx]);
-
+        
         for (unsigned int y = 0; y < input_size_y-stride/2; y+= stride)
             for (unsigned int x = 0; x < input_size_x-stride/2; x+= stride)
             {
@@ -205,16 +205,16 @@ void Conv2d_kernel1(     io_data_type *output_buffer,
                     result+= (acc_data_type)kernel_[0]*(acc_data_type)input_[0 + 0*width];
                     result+= (acc_data_type)kernel_[1]*(acc_data_type)input_[1 + 0*width];
                     result+= (acc_data_type)kernel_[2]*(acc_data_type)input_[2 + 0*width];
-
+                    
                     result+= (acc_data_type)kernel_[3]*(acc_data_type)input_[0 + 1*width];
                     result+= (acc_data_type)kernel_[4]*(acc_data_type)input_[1 + 1*width];
                     result+= (acc_data_type)kernel_[5]*(acc_data_type)input_[2 + 1*width];
- 
+                    
                     result+= (acc_data_type)kernel_[6]*(acc_data_type)input_[0 + 2*width];
-                    result+= (acc_data_type)kernel_[7]*(acc_data_type)input_[0 + 2*width];
-                    result+= (acc_data_type)kernel_[8]*(acc_data_type)input_[0 + 2*width];
-                }
-  
+                    result+= (acc_data_type)kernel_[7]*(acc_data_type)input_[1 + 2*width];
+                    result+= (acc_data_type)kernel_[8]*(acc_data_type)input_[2 + 2*width];
+                } 
+
                 result = ((result + bias_buffer[kernel_idx])*scale)/(128*128);
                
                 if (result > 127) 

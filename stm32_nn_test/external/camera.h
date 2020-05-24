@@ -49,7 +49,7 @@
 #define OV9655_COLOR_EFFECT_BLUE        0xCC000000000060  /* Blue effect                 */
 #define OV9655_COLOR_EFFECT_GREEN       0xCC000000008000  /* Green effect                */
 #define OV9655_COLOR_EFFECT_RED         0xCC600000000000  /* Red effect                  */
-
+ 
 
 class Camera
 {
