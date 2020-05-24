@@ -77,15 +77,16 @@ void IP_ResultToDisplay(    LCD &lcd,
                             unsigned int y_ofs,
                             unsigned int x_ofs)
 {
-    unsigned int threshold = 150;
+    int threshold = 20;
+    
     unsigned int ptr = 0;
     for (unsigned int y = 0; y < source_height; y++)
         for (unsigned int x = 0; x < source_width; x++)
         {
-            unsigned int q00 = source_buffer[((y + 0)%source_height)*source_width + (x + 0)%source_width] + 127;
-            unsigned int q01 = source_buffer[((y + 0)%source_height)*source_width + (x + 1)%source_width] + 127;
-            unsigned int q10 = source_buffer[((y + 1)%source_height)*source_width + (x + 0)%source_width] + 127;
-            unsigned int q11 = source_buffer[((y + 1)%source_height)*source_width + (x + 1)%source_width] + 127;
+            int q00 = source_buffer[((y + 0)%source_height)*source_width + (x + 0)%source_width];
+            int q01 = source_buffer[((y + 0)%source_height)*source_width + (x + 1)%source_width];
+            int q10 = source_buffer[((y + 1)%source_height)*source_width + (x + 0)%source_width];
+            int q11 = source_buffer[((y + 1)%source_height)*source_width + (x + 1)%source_width];
 
             if (q00 > threshold)
                 q00 = 255;
@@ -113,7 +114,7 @@ void IP_ResultToDisplay(    LCD &lcd,
             for (unsigned int ky = 0; ky < upscale; ky++)
                 for (unsigned int kx = 0; kx < upscale; kx++)
                 {
-                    unsigned int intensity = 0;
+                    int intensity = 0;
                     
                     intensity+= q00*(upscale - ky)*(upscale - kx);
                     intensity+= q01*(upscale - ky)*kx;
