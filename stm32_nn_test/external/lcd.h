@@ -79,7 +79,7 @@ class LCD
     void SetCursor2Draw(uint16_t xpos, uint16_t ypos);
     void SetCursor3Draw(int16_t xpos, int16_t ypos, int16_t zpos);
 
-
+ 
     void DrawPixel(uint16_t color);
     void DrawPixel(uint8_t r, uint8_t g, uint8_t b);
 

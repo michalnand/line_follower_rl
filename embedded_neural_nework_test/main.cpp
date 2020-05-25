@@ -123,7 +123,9 @@ int main()
 
         double k = 0.05;
         fps = (1.0 - k)*fps + k*1.0/(time_stop - time_start + 0.0000001);
-        std::string text = "FPS = " + std::to_string( (int)round(fps));
+
+        double macs_sec = model.total_macs*fps/1000000000.0;
+        std::string text = "FPS = " + std::to_string( (int)round(fps)) + "   GMacs/s = " + std::to_string(macs_sec);
 
         cv::putText(result, text, cv::Point(30, 30), cv::FONT_HERSHEY_SIMPLEX ,  1, CV_RGB(255, 255, 255), 2, cv::LINE_AA);
 

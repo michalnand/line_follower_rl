@@ -16,12 +16,10 @@ void modules_init()
   led = 1;
 
   terminal.init();
-  mem.init();
+  mem_init();
 
   terminal << "\n\n\n";
   terminal << "terminal ready\n";
-
-  mem.print();
 
   sdram.init();
   if (sdram.init() == 0)
@@ -69,9 +67,7 @@ int main()
     Camera cam;
     cam.init();
 
-    uint32_t frame_buffer_size  = (cam.get_width()*cam.get_height()*2*sizeof(uint16_t))/sizeof(uint32_t);
-    uint32_t *camera_buffer     = sdram.allocate(frame_buffer_size);
- 
+    uint32_t *camera_buffer     = sdram.allocate(cam.get_buffer_size());
     cam.stream_start(camera_buffer);
 
     LineNetwork model;
@@ -85,14 +81,15 @@ int main()
         lcd.FillLayer(RGB_COL_BLACK);
    
         
+        auto time_start = timer.get_time();
+        
         IP_FromCamera(model.input_buffer(), cam, model.input_height, model.input_width, true);
         IP_ToDisplay(lcd, model.input_buffer(), model.input_height, model.input_width, 0, 0);
-
-        auto time_start = timer.get_time();
         model.forward();
-        auto time_stop = timer.get_time();
-
+        
         IP_ResultToDisplay(lcd, model.output_buffer(), model.output_height, model.output_width, 16, 0, model.input_width + 4);
+        
+        auto time_stop = timer.get_time();
 
         d_time = 0.8*d_time + 0.2*0.001*(time_stop - time_start);
           

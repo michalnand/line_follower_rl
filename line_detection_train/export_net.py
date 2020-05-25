@@ -46,8 +46,6 @@ class ExportNetwork:
 
                 total_macs+= macs
 
-            
-
             input_shape = output_shape
 
             if required_memory > max_required_memory:
@@ -87,6 +85,7 @@ class ExportNetwork:
         self.code_cpp+= "\t: ModelInterface()\n"
         self.code_cpp+= "{\n"
         self.code_cpp+= "\t" + "init_buffer(" + str(max_required_memory) + ");\n"
+        self.code_cpp+= "\t" + "total_macs = " + str(total_macs) + ";\n"
         self.code_cpp+= "\t" + "input_channels = "  + str(input_channels) + ";\n"
         self.code_cpp+= "\t" + "input_height = "  + str(input_height) + ";\n"
         self.code_cpp+= "\t" + "input_width = "   + str(input_width) + ";\n"
@@ -164,7 +163,6 @@ class ExportNetwork:
         code = (code_network, code_weight)
         macs = 2*output_size*input_size + 2*output_size
 
-
         print("export_Linear :")
         print("output_size    ", output_size)
         print("input_size     ", input_size)
@@ -241,7 +239,6 @@ class ExportNetwork:
         macs+= 2*output_channels*output_shape[1]*output_shape[2]    #bias
 
 
-
         print("export_Conv2d :")
         print("output_channels ", output_channels)
         print("input_height    ", input_height)
@@ -252,8 +249,6 @@ class ExportNetwork:
         print("output_shape    ", output_shape)
         print("macs            ", macs)
         print("\n\n")
-
-
 
         return code, output_shape, required_memory, macs
     
@@ -287,11 +282,8 @@ class ExportNetwork:
         return result_weights, result_bias, scale
         
 
-            
- 
-
-model_input_height      = 512
-model_input_width       = 512
+model_input_height      = 192
+model_input_width       = 192
 model_output_channels   = 1
 
 model = Model((1, model_input_height, model_input_width), model_output_channels)

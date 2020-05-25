@@ -557,52 +557,53 @@ const int8_t LineNetwork_layer_9_bias[] = {
 LineNetwork::LineNetwork()
 	: ModelInterface()
 {
-	init_buffer(18432);
+	init_buffer(73728);
+	total_macs = 7280928;
 	input_channels = 1;
-	input_height = 96;
-	input_width = 96;
+	input_height = 192;
+	input_width = 192;
 	output_channels = 1;
-	output_height = 6;
-	output_width = 6;
+	output_height = 12;
+	output_width = 12;
 }
 
 void LineNetwork::forward()
 {
 	Conv2d(	output_buffer(), input_buffer(),
 		LineNetwork_layer_0_bias, LineNetwork_layer_0_weights, 
-		55, 8, 1, 96, 96, 3, 2);
+		55, 8, 1, 192, 192, 3, 2);
+	swap_buffer();
+
+	ReLU(	output_buffer(), input_buffer(), 73728);
+	swap_buffer();
+
+	Conv2d(	output_buffer(), input_buffer(),
+		LineNetwork_layer_2_bias, LineNetwork_layer_2_weights, 
+		55, 8, 8, 96, 96, 3, 2);
 	swap_buffer();
 
 	ReLU(	output_buffer(), input_buffer(), 18432);
 	swap_buffer();
 
 	Conv2d(	output_buffer(), input_buffer(),
-		LineNetwork_layer_2_bias, LineNetwork_layer_2_weights, 
-		55, 8, 8, 48, 48, 3, 2);
+		LineNetwork_layer_4_bias, LineNetwork_layer_4_weights, 
+		57, 16, 8, 48, 48, 3, 2);
+	swap_buffer();
+
+	ReLU(	output_buffer(), input_buffer(), 9216);
+	swap_buffer();
+
+	Conv2d(	output_buffer(), input_buffer(),
+		LineNetwork_layer_6_bias, LineNetwork_layer_6_weights, 
+		48, 32, 16, 24, 24, 3, 2);
 	swap_buffer();
 
 	ReLU(	output_buffer(), input_buffer(), 4608);
 	swap_buffer();
 
 	Conv2d(	output_buffer(), input_buffer(),
-		LineNetwork_layer_4_bias, LineNetwork_layer_4_weights, 
-		57, 16, 8, 24, 24, 3, 2);
-	swap_buffer();
-
-	ReLU(	output_buffer(), input_buffer(), 2304);
-	swap_buffer();
-
-	Conv2d(	output_buffer(), input_buffer(),
-		LineNetwork_layer_6_bias, LineNetwork_layer_6_weights, 
-		48, 32, 16, 12, 12, 3, 2);
-	swap_buffer();
-
-	ReLU(	output_buffer(), input_buffer(), 1152);
-	swap_buffer();
-
-	Conv2d(	output_buffer(), input_buffer(),
 		LineNetwork_layer_9_bias, LineNetwork_layer_9_weights, 
-		32, 1, 32, 6, 6, 1, 1);
+		32, 1, 32, 12, 12, 1, 1);
 	swap_buffer();
 
 	swap_buffer();

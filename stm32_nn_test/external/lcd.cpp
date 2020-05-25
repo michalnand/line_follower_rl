@@ -293,7 +293,7 @@ void LCD::DrawPixel(uint16_t color)
     }
   }
   else
-  {
+  { 
     aktCursorY++;
     if(aktCursorY>=LCD_MAXY)
     {

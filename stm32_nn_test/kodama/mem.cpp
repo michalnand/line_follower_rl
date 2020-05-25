@@ -1,66 +1,66 @@
 #include "mem.h"
-#include <terminal.h>
 
+typedef unsigned int size_t;
+
+extern unsigned int __data_start__;
+extern unsigned int __ram_size__;
 extern unsigned int __heap_start__;
 
-Mem mem;
+unsigned char *mem_ptr;
 
-Mem::Mem()
+
+unsigned int mem_init()
 {
-  init();
+    mem_ptr = (unsigned char*)(&__heap_start__);
+    return (unsigned int)mem_ptr;
 }
 
-Mem::~Mem()
+unsigned int mem_get_ptr()
 {
-
+    return (unsigned int)mem_ptr;
 }
 
-void Mem::init()
+void *malloc(size_t size)
 {
-  mem_ptr = (unsigned char*)(&__heap_start__);
+    unsigned char *mem_res = mem_ptr;
+    mem_ptr+= size;
+
+    return (void*)mem_res;
 }
 
-void Mem::print()
-{
-  terminal.printf("heap start 0x%x, current 0x%x \n", &__heap_start__, mem_ptr);
-
-  terminal.printf("\n");
-}
-
-void *Mem::malloc(unsigned int size)
-{
-  unsigned char *mem_res = mem_ptr;
-  mem_ptr+= size;
-  return (void*)mem_res;
-}
-
-void Mem::free(void *p)
+void free(void *p)
 {
     (void)p;
 }
 
-void Mem::clean()
+void * operator new(size_t size) noexcept
 {
-  mem_ptr = (unsigned char*)(&__heap_start__);
+    return malloc(size);
 }
 
-
-void * operator new(unsigned int size)
+void operator delete(void *p) noexcept
 {
-    return mem.malloc(size);
+    free(p);
 }
 
-void operator delete(void *p)
+void operator delete(void *p, size_t size) noexcept
 {
-  mem.free(p);
+    (void)size;
+    operator delete(p);
 }
 
-void* operator new[](unsigned int size)
+void* operator new[](size_t size) noexcept
 {
     return operator new(size); // Same as regular new
 }
 
-void operator delete[](void *p)
+void operator delete[](void *p) noexcept
 {
+    operator delete(p); // Same as regular delete
+}
+
+void operator delete[](void *p, unsigned int size) noexcept
+{
+    (void)size;
     operator delete(p); // Same as regular delete
 }

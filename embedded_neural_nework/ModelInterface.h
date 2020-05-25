@@ -23,6 +23,7 @@ class ModelInterface
     public:
         unsigned int input_channels, input_height, input_width;
         unsigned int output_channels, output_height, output_width;
+        unsigned int total_macs;
 
     protected:
         void init_buffer(unsigned int size);

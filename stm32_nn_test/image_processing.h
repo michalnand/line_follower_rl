@@ -14,7 +14,7 @@ void IP_FromCamera(     int8_t* destination_buffer,
                         bool white_balance = true);
 
 
-void IP_ToDisplay(  LCD &lcd,
+void IP_ToDisplay(  LCD &display_,
                     int8_t* source_buffer, 
                     unsigned int source_height, 
                     unsigned int source_width,
@@ -22,7 +22,7 @@ void IP_ToDisplay(  LCD &lcd,
                     unsigned int x_ofs = 0);
 
 
-void IP_ResultToDisplay(    LCD &lcd,
+void IP_ResultToDisplay(    LCD &display_,
                             int8_t* source_buffer, 
                             unsigned int source_height, 
                             unsigned int source_width,

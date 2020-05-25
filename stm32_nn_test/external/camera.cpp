@@ -1,17 +1,8 @@
-#include "camera.h"
+#include <camera.h>
 
 DCMI_HandleTypeDef camera_dcmi;
 DMA_HandleTypeDef camera_hdma_handler;
 volatile uint32_t camera_refresh = 0;
-
-#define CAMERA_QQVGA_RES_X        160
-#define CAMERA_QQVGA_RES_Y        120
-
-#define CAMERA_VGA_RES_X          640
-#define CAMERA_VGA_RES_Y          480
-#define CAMERA_480_RES_X          480
-#define CAMERA_272_RES_Y          272
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,7 +31,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *dcmi)
 
 
 
-/* Initialization sequence for QQVGA resolution (160x120) */
+/* Initialization sequence for QQVGA resolution (160_120) */
 const unsigned char OV9655_QQVGA[][2]=
 {
   {0x00, 0x00},
@@ -196,7 +187,7 @@ const unsigned char OV9655_QQVGA[][2]=
 };
 
 
-/* Initialization sequence for VGA resolution (640x480)*/
+/* Initialization sequence for VGA resolution (640_480)*/
 const unsigned char OV9655_VGA[][2]=
 {
   {0x00, 0x00},
@@ -348,15 +339,6 @@ const unsigned char OV9655_VGA[][2]=
   {0xbf, 0x01},
 };
 
-
-
-
-
-
-
-
-
-
 Camera::Camera()
 {
 
@@ -367,7 +349,7 @@ Camera::~Camera()
 
 }
 
-int Camera::init()
+int Camera::init(unsigned int resolution)
 {
   camera_refresh = 0;
   res_x = 0;
@@ -379,53 +361,103 @@ int Camera::init()
   dcmi_pwr_en = 0;
   delay_loops(10000000);
 
- //read and check camera ID register
- i2c_dcmi.read_reg(OV9655_I2C_ADDRESS, OV9655_SENSOR_PIDH);
+  //read and check camera ID register
+  i2c_dcmi.read_reg(OV9655_I2C_ADDRESS, OV9655_SENSOR_PIDH);
 
- /*
- if(i2c_dcmi.read_reg(OV9655_I2C_ADDRESS, OV9655_SENSOR_PIDH) != OV9655_ID)
-  return -1;
-*/
- //init DCMI
- camera_dcmi.Init.CaptureRate      = DCMI_CR_ALL_FRAME;
- camera_dcmi.Init.HSPolarity       = DCMI_HSPOLARITY_LOW;
- camera_dcmi.Init.SynchroMode      = DCMI_SYNCHRO_HARDWARE;
- camera_dcmi.Init.VSPolarity       = DCMI_VSPOLARITY_HIGH;
- camera_dcmi.Init.ExtendedDataMode = DCMI_EXTEND_DATA_8B;
- camera_dcmi.Init.PCKPolarity      = DCMI_PCKPOLARITY_RISING;
- camera_dcmi.Instance              = DCMI;
-
-
- __HAL_RCC_DCMI_CLK_ENABLE();
-
- MspInit();
- HAL_DCMI_Init(&camera_dcmi);
+  /*
+  if(i2c_dcmi.read_reg(OV9655_I2C_ADDRESS, OV9655_SENSOR_PIDH) != OV9655_ID)
+    return -1;
+  */
+  //init DCMI
+  camera_dcmi.Init.CaptureRate      = DCMI_CR_ALL_FRAME;
+  camera_dcmi.Init.HSPolarity       = DCMI_HSPOLARITY_LOW;
+  camera_dcmi.Init.SynchroMode      = DCMI_SYNCHRO_HARDWARE;
+  camera_dcmi.Init.VSPolarity       = DCMI_VSPOLARITY_HIGH;
+  camera_dcmi.Init.ExtendedDataMode = DCMI_EXTEND_DATA_8B;
+  camera_dcmi.Init.PCKPolarity      = DCMI_PCKPOLARITY_RISING;
+  camera_dcmi.Instance              = DCMI;
 
 
- // 160x120 QQVGA resolution
+  __HAL_RCC_DCMI_CLK_ENABLE();
 
- res_x = CAMERA_QQVGA_RES_X;
- res_y = CAMERA_QQVGA_RES_Y;
- send_init_sequence_qqvga();
- HAL_DCMI_DisableCROP(&camera_dcmi);
+  MspInit();
+  HAL_DCMI_Init(&camera_dcmi);
 
 
-/*
- // For 480x272 resolution, the OV9655 sensor is set to VGA resolution
- // as OV9655 doesn't supports 480x272 resolution,
-// then DCMI is configured to output a 480x272 cropped window
-res_x = CAMERA_480_RES_X;
-res_y = CAMERA_272_RES_Y;
-send_init_sequence_vga();
+  // 96_96 resolution
+  if (resolution == RESOLUTION_96_96)
+  {
+    res_x = RESOLUTION_96_96_X;
+    res_y = RESOLUTION_96_96_Y;
+    send_init_sequence_qqvga();
 
-HAL_DCMI_ConfigCROP(&camera_dcmi,           // Crop in the middle of the VGA picture
-                    (CAMERA_VGA_RES_X - res_x)/2,
-                    (CAMERA_VGA_RES_Y - res_y)/2,
-                    (res_x * 2) - 1,
-                     res_y - 1);
-HAL_DCMI_EnableCROP(&camera_dcmi);
-*/
- return 0;
+    HAL_DCMI_ConfigCROP(&camera_dcmi,           // Crop in the middle of the QQVGA picture
+                        (RESOLUTION_160_120_X - res_x)/2,
+                        (RESOLUTION_160_120_Y - res_y)/2,
+                        (res_x * 2) - 1, 
+                        (res_y) - 1);
+    
+    HAL_DCMI_EnableCROP(&camera_dcmi); 
+  }
+
+  // 160_120 QQVGA resolution
+  if (resolution == RESOLUTION_160_120)
+  {
+    res_x = RESOLUTION_160_120_X;
+    res_y = RESOLUTION_160_120_Y;
+    send_init_sequence_qqvga();
+    HAL_DCMI_DisableCROP(&camera_dcmi);
+  }
+
+
+  // 192_192 resolution
+  if (resolution == RESOLUTION_192_192)
+  {
+    // For 480x272 resolution, the OV9655 sensor is set to VGA resolution
+    // as OV9655 doesn't supports 480x272 resolution,
+    // then DCMI is configured to output a 480x272 cropped window
+    res_x = RESOLUTION_192_192_X;
+    res_y = RESOLUTION_192_192_Y;
+    send_init_sequence_vga();
+
+    HAL_DCMI_ConfigCROP(&camera_dcmi,           // Crop in the middle of the VGA picture
+                        (RESOLUTION_640_480_X - res_x)/2,
+                        (RESOLUTION_640_480_Y - res_y)/2,
+                        (res_x * 2) - 1,
+                        (res_y) - 1);
+
+    HAL_DCMI_EnableCROP(&camera_dcmi);
+  }
+  
+  // 480x272 resolution
+  if (resolution == RESOLUTION_480_272)
+  {
+    // For 480x272 resolution, the OV9655 sensor is set to VGA resolution
+    // as OV9655 doesn't supports 480x272 resolution,
+    // then DCMI is configured to output a 480x272 cropped window
+    res_x = RESOLUTION_480_272_X;
+    res_y = RESOLUTION_480_272_Y;
+    send_init_sequence_vga();
+ 
+    HAL_DCMI_ConfigCROP(&camera_dcmi,           // Crop in the middle of the VGA picture
+                        (RESOLUTION_640_480_X - res_x)/2,
+                        (RESOLUTION_640_480_Y - res_y)/2,
+                        (res_x * 2) - 1,
+                        (res_y) - 1);
+    
+    HAL_DCMI_EnableCROP(&camera_dcmi);
+  }
+
+  // 640_480 VGA resolution
+  if (resolution == RESOLUTION_640_480)
+  {
+    res_x = RESOLUTION_640_480_X; 
+    res_y = RESOLUTION_640_480_Y;
+    send_init_sequence_vga();
+    HAL_DCMI_DisableCROP(&camera_dcmi);
+  }
+
+  return 0;
 }
 
 
@@ -527,16 +559,18 @@ void Camera::MspInit()
 
 void Camera::stream_start(uint32_t *buffer)
 {
-  uint32_t size =  get_width()*get_height();
-  HAL_DCMI_Start_DMA(&camera_dcmi, DCMI_MODE_CONTINUOUS, (uint32_t)buffer, size);
-  this->buffer = buffer;
+    this->m_buffer = buffer;
+
+    uint32_t size =  get_width()*get_height();
+    HAL_DCMI_Start_DMA(&camera_dcmi, DCMI_MODE_CONTINUOUS, (uint32_t)m_buffer, size);
 }
 
 void Camera::snapshot_start(uint32_t *buffer)
 {
-  uint32_t size =  get_width()*get_height();
-  HAL_DCMI_Start_DMA(&camera_dcmi, DCMI_MODE_SNAPSHOT, (uint32_t)buffer, size);
-  this->buffer = buffer;
+    this->m_buffer = buffer;
+
+    uint32_t size =  get_width()*get_height();
+    HAL_DCMI_Start_DMA(&camera_dcmi, DCMI_MODE_SNAPSHOT, (uint32_t)m_buffer, size);
 }
 
 uint32_t Camera::need_refresh()
@@ -562,7 +596,12 @@ uint32_t Camera::get_height()
 
 uint32_t* Camera::get_buffer()
 {
-  return buffer;
+  return m_buffer;
+}
+
+uint32_t Camera::get_buffer_size()
+{
+  return (get_width()*get_height()*2*sizeof(uint16_t))/sizeof(uint32_t);
 }
 
 
@@ -583,7 +622,7 @@ void Camera::send_init_sequence_vga()
 {
   i2c_dcmi.write_reg(OV9655_I2C_ADDRESS, OV9655_SENSOR_COM7, 0x80);
 
-  delay_loops(20000);
+  delay_loops(20000); 
 
   for(unsigned int i = 0; i < (sizeof(OV9655_VGA)/2); i++)
   {
